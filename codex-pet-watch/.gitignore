@@ -1,0 +1,9 @@
+build/
+build-x64/
+build-x86/
+*.user
+*.suo
+*.obj
+*.exe
+*.pdb
+*.ilk
