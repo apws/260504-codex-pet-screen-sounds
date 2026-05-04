@@ -47,4 +47,11 @@ if [ -f "../shared/sounds/ringout.wav" ]; then
   cp "../shared/sounds/ringout.wav" "$RESOURCES/ringout.wav"
 fi
 
+if command -v codesign >/dev/null 2>&1; then
+  codesign --force --deep --sign - "$APP_DIR"
+  echo "Ad-hoc signed $APP_DIR"
+else
+  echo "codesign not found; built unsigned app"
+fi
+
 echo "Built $APP_DIR"

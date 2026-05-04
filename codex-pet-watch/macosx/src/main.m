@@ -265,7 +265,7 @@ static BOOL ParseConfig(AppConfig *cfg) {
 }
 
 - (NSData *)pixelDataForCapture {
-    CGImageRef image = CGDisplayCreateImage(self.displayID, self.captureRectPixels);
+    CGImageRef image = CGDisplayCreateImageForRect(self.displayID, self.captureRectPixels);
     if (!image) return nil;
 
     CGDataProviderRef provider = CGImageGetDataProvider(image);
