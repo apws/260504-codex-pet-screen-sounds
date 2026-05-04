@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>260504a pet-sounds-watcher-session</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #fff;
+      --ink: #172033;
+      --muted: #5d687b;
+      --line: #d8deea;
+      --accent: #143c5a;
+      --accent-2: #b45f30;
+      --code: #eef3f4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 24px clamp(18px, 4vw, 48px);
+      border-bottom: 5px solid var(--accent-2);
+    }
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 24px auto 56px;
+    }
+    h1 { margin: 0 0 6px; font-size: 26px; }
+    .sub { margin: 0; color: rgba(255, 255, 255, 0.82); }
+    details {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 14px 0;
+      box-shadow: 0 8px 24px rgba(23, 32, 51, 0.07);
+      overflow: hidden;
+    }
+    details[open] summary { border-bottom: 1px solid var(--line); }
+    summary {
+      cursor: pointer;
+      padding: 13px 16px;
+      color: var(--accent);
+      font-weight: 700;
+      list-style-position: inside;
+    }
+    .content { padding: 16px; }
+    code {
+      background: var(--code);
+      border-radius: 4px;
+      padding: 0.1em 0.35em;
+      font-family: Consolas, "Cascadia Mono", "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+    pre {
+      margin: 12px 0;
+      padding: 12px 14px;
+      overflow: auto;
+      background: var(--code);
+      border-left: 5px solid var(--accent);
+      font: 13px/1.45 Consolas, "Cascadia Mono", "Liberation Mono", monospace;
+    }
+    .note { color: var(--muted); font-size: 0.94em; }
+    .timeline p {
+      position: relative;
+      padding-left: 6.3em;
+      margin: 0 0 0.8em;
+    }
+    .time {
+      position: absolute;
+      left: 0;
+      top: 0.1em;
+      width: 5.4em;
+      color: var(--accent-2);
+      font-family: Consolas, "Cascadia Mono", "Liberation Mono", monospace;
+      font-size: 0.92em;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>260504a pet-sounds-watcher-session</h1>
+    <p class="sub">Curated Codex session log for the Windows pet pixel watcher and platform folder layout.</p>
+  </header>
+  <main>
+    <p class="note">Created 2026-05-04 in <code>V:\~prj\260504-codex-pet-screen-sounds</code>. Chat step times below are approximate unless backed by Git/file output.</p>
+
+    <details open>
+      <summary>Approximate Session Timeline</summary>
+      <div class="content timeline">
+        <p><span class="time">01:56</span> Evidence: initial Git commit <code>4d93858 2026-05-04T01:56:08+02:00 init</code>.</p>
+        <p><span class="time">~02:00</span> Inspected a small Win32/GDI project scaffold for watching a screen rectangle and playing a sound on bitmap changes.</p>
+        <p><span class="time">~02:10</span> Built with Visual Studio 2022 Preview after bypassing a broken MSYS/devkitPro <code>cmake</code>/<code>git</code> on PATH. Fixed a MSVC compile issue in <code>std::max</code> mixed <code>int</code>/<code>LONG</code> rectangle math.</p>
+        <p><span class="time">~02:15</span> Changed relative WAV resolution to <code>C:\Windows\Media</code> and defaulted no-arg launch to <code>ringout.wav</code>.</p>
+        <p><span class="time">~02:20</span> Reduced default watch rectangle from <code>360x240</code> DIP to <code>80x80</code> DIP after screenshot showed the larger rectangle included browser cookie/page pixels.</p>
+        <p><span class="time">~02:30</span> Converted from a console-style Win32 app to a Windows subsystem systray app with a small Codex-ish tray icon, green bottom-left status square, and right-click <code>Exit</code>.</p>
+        <p><span class="time">~02:40</span> User verified the systray watcher rings on pet visual changes. Discussed timing artifacts from literal pixel watching and async/retriggered sound playback.</p>
+        <p><span class="time">~02:50</span> Discussed macOS feasibility: native Swift/AppKit menu-bar app, CoreGraphics screen capture, AVFoundation/NSSound playback, and Screen Recording permission.</p>
+        <p><span class="time">~03:08</span> Reorganized project into platform folders: current Windows implementation moved under <code>codex-pet-watch/win32/</code>; added <code>codex-pet-watch/macosx/README.md</code> placeholder.</p>
+        <p><span class="time">~03:10</span> Rebuilt Win32 in the new folder and smoke-tested no-arg launch. User retested and confirmed it was perfect.</p>
+        <p><span class="time">~03:15</span> User found Codex pet recovery path: <code>Settings -&gt; Appearance -&gt; Pets -&gt; Wake pet</code>. Watcher resumed normally.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Current Repo State</summary>
+      <div class="content">
+        <p>Current intended layout:</p>
+        <pre>codex-pet-watch/
+  README.md
+  win32/
+    README.md
+    CMakeLists.txt
+    src/main.cpp
+    build_msvc_x64.bat
+    build_msvc_x86.bat
+    build_cl_current_prompt.bat
+    run.cmd
+    build-x64/Release/codex_pet_watch.exe
+  macosx/
+    README.md</pre>
+        <p>Git status evidence at save time:</p>
+        <pre> D codex-pet-watch/.gitignore
+ D codex-pet-watch/CMakeLists.txt
+ M codex-pet-watch/README.md
+ D codex-pet-watch/build_cl_current_prompt.bat
+ D codex-pet-watch/build_msvc_x64.bat
+ D codex-pet-watch/build_msvc_x86.bat
+ D codex-pet-watch/run.cmd
+ D codex-pet-watch/src/main.cpp
+ D codex-pet-watch/wav/chimes.wav
+ D codex-pet-watch/wav/chord.wav
+ D codex-pet-watch/wav/ding.wav
+ D codex-pet-watch/wav/notify.wav
+ D codex-pet-watch/wav/ringout.wav
+ D codex-pet-watch/wav/tada.wav
+?? codex-pet-watch/macosx/
+?? codex-pet-watch/win32/
+?? rc.cmd
+?? restart-codex.ps1</pre>
+        <p class="note">The deleted <code>wav/</code> folder was intentional per user note. The Windows app now uses <code>C:\Windows\Media\ringout.wav</code> by default.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Windows Watcher Behavior</summary>
+      <div class="content">
+        <p>The working Win32 app is now a no-console systray app:</p>
+        <ul>
+          <li>Launches without args.</li>
+          <li>Defaults to an <code>80x80</code> DIP rectangle at the bottom-left of the selected monitor.</li>
+          <li>At the tested monitor setting <code>1920x1200 @ 96 DPI</code>, this maps to <code>left=0 top=1120 width=80 height=80</code>.</li>
+          <li>Captures pixels via GDI <code>BitBlt</code> and compares BGRA bytes against the previous frame.</li>
+          <li>Plays <code>C:\Windows\Media\ringout.wav</code> on any bitmap difference.</li>
+          <li>Shows a tray icon with a green square in the bottom-left and has a right-click <code>Exit</code> menu.</li>
+        </ul>
+        <p>Known nature of the workaround: it detects pet pixel changes, not agent state. Pet animation timing can produce one short ring, one full ring, or two rings.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Important Build And Environment Notes</summary>
+      <div class="content">
+        <p>Useful Windows build command from <code>codex-pet-watch/win32</code>:</p>
+        <pre>&amp; $env:ComSpec /c 'call "C:\Program Files\Microsoft Visual Studio\2022\Preview\VC\Auxiliary\Build\vcvars64.bat" &amp;&amp; "C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -S . -B build-x64 -A x64 &amp;&amp; "C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --build build-x64 --config Release'</pre>
+        <p>Build output after folder move:</p>
+        <pre>C:\Users\petra\Versioning\~prj\260504-codex-pet-screen-sounds\codex-pet-watch\win32\build-x64\Release\codex_pet_watch.exe</pre>
+        <p>Gotchas encountered:</p>
+        <ul>
+          <li><code>V:\...</code> path did not resolve in the sandbox; equivalent writable path was <code>C:\Users\petra\Versioning\~prj\260504-codex-pet-screen-sounds</code>.</li>
+          <li>PATH initially resolved <code>cmake</code>, <code>git</code>, and even <code>cmd</code> through devkitPro/MSYS2, causing signal pipe/access errors. Used Visual Studio bundled CMake and Windows <code>$env:ComSpec</code>.</li>
+          <li>Normal Git required a one-off safe-directory flag due to ownership SID mismatch: <code>-c safe.directory='C:/Users/petra/Versioning/~prj/260504-codex-pet-screen-sounds'</code>.</li>
+          <li>After moving <code>build-x64</code>, CMake cache pointed to the old source path. Deleted only generated <code>win32/build-x64</code>, then regenerated cleanly.</li>
+          <li>Running watcher locked the executable during rebuild; stopped <code>codex_pet_watch</code> process before rebuilding.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>macOS Notes</summary>
+      <div class="content">
+        <p>macOS version is planned but not implemented yet. Current placeholder lives at <code>codex-pet-watch/macosx/README.md</code>.</p>
+        <p>Preferred design:</p>
+        <ul>
+          <li>Separate native Swift/AppKit app, not a Win32 port.</li>
+          <li><code>NSStatusItem</code> menu-bar icon with <code>Exit</code>.</li>
+          <li><code>CGDisplayCreateImage</code> / CoreGraphics crop of bottom-left <code>80x80</code> point rectangle.</li>
+          <li>AVFoundation or AppKit sound playback.</li>
+          <li>Requires Screen Recording permission on macOS Catalina and newer.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>Reusable Commands</summary>
+      <div class="content">
+        <pre># List project files
+rg --files
+
+# Safe one-off Git status on this machine
+&amp; 'C:\Program Files\Git\cmd\git.exe' -c safe.directory='C:/Users/petra/Versioning/~prj/260504-codex-pet-screen-sounds' status --short
+
+# Stop watcher if it locks the exe
+Get-Process codex_pet_watch -ErrorAction SilentlyContinue | Stop-Process -Force
+
+# Run rebuilt Win32 watcher from new location
+cd C:\Users\petra\Versioning\~prj\260504-codex-pet-screen-sounds\codex-pet-watch\win32
+.\build-x64\Release\codex_pet_watch.exe</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary>Pet UI Recovery Note</summary>
+      <div class="content">
+        <p>If the watcher is still running but the pet disappears or is behind the Codex window, the watcher cannot raise the pet; it only watches pixels. The user found the Codex UI recovery path:</p>
+        <pre>Settings -&gt; Appearance -&gt; Pets -&gt; Wake pet</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary>Open Follow-Ups</summary>
+      <div class="content">
+        <ul>
+          <li>Implement macOS native app under <code>codex-pet-watch/macosx/</code>.</li>
+          <li>Optionally add a debounce/cooldown such as <code>--cooldown-ms=2000</code> if rings become too chatty.</li>
+          <li>Optionally add a diagnostic popup/mode that shows detected monitor size, DPI, and watch rectangle.</li>
+          <li>Stage/commit the platform folder move when ready.</li>
+        </ul>
+      </div>
+    </details>
+  </main>
+</body>
+</html>

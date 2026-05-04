@@ -1,0 +1,8 @@
+Monitor px:     left=0 top=0 right=1920 bottom=1200 size=1920x1200
+Monitor logical: size=1920x1200 DIP at dpi=96x96
+Anchor area:    full monitor
+Pet rect px:    left=0 top=1120 width=80 height=80
+Pet rect DIP:   width=80 height=80
+Poll:           1000 ms
+Sound:          C:\Windows\Media\ringout.wav
+

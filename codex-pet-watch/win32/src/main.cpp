@@ -1,12 +1,21 @@
+#ifndef UNICODE
 #define UNICODE
+#endif
+#ifndef _UNICODE
 #define _UNICODE
+#endif
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0A00
 #endif
 
 #include <windows.h>
+#include <shellapi.h>
 #include <shellscalingapi.h>
 #include <mmsystem.h>
 #include <cstdio>
@@ -22,16 +31,22 @@
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "shcore.lib")
+#pragma comment(lib, "shell32.lib")
 
 namespace {
 
 constexpr wchar_t kWindowClassName[] = L"CodexPetAreaOverlayWindow";
+constexpr wchar_t kDefaultSoundFolder[] = L"C:\\Windows\\Media";
+constexpr wchar_t kDefaultSoundFile[] = L"ringout.wav";
 constexpr UINT_PTR kCaptureTimerId = 1;
+constexpr UINT kTrayIconMessage = WM_APP + 1;
+constexpr UINT kTrayIconId = 1;
+constexpr UINT kTrayExitCommand = 1001;
 
 struct Config {
     std::wstring soundPath;
-    int widthDip = 360;
-    int heightDip = 240;
+    int widthDip = 80;
+    int heightDip = 80;
     UINT pollMs = 1000;
     bool useWorkArea = false;
     bool followForegroundMonitor = false;
@@ -55,6 +70,8 @@ struct AppState {
     std::vector<std::uint8_t> previousPixels;
     bool haveBaseline = false;
     unsigned long long changeCount = 0;
+    HICON trayIcon = nullptr;
+    bool trayIconAdded = false;
 };
 
 AppState g_app;
@@ -69,25 +86,15 @@ bool StartsWith(const std::wstring& s, const wchar_t* prefix) {
     return s.size() >= n && s.compare(0, n, prefix) == 0;
 }
 
-std::wstring GetExeFolder() {
-    wchar_t path[MAX_PATH];
-    DWORD len = GetModuleFileNameW(nullptr, path, MAX_PATH);
-    if (len == 0 || len == MAX_PATH) return L".";
-    std::wstring p(path, len);
-    size_t slash = p.find_last_of(L"\\/");
-    if (slash == std::wstring::npos) return L".";
-    return p.substr(0, slash);
-}
-
 bool IsAbsoluteOrRootedPath(const std::wstring& p) {
     if (p.size() >= 3 && std::iswalpha(p[0]) && p[1] == L':' && (p[2] == L'\\' || p[2] == L'/')) return true;
     if (p.size() >= 2 && p[0] == L'\\' && p[1] == L'\\') return true; // UNC
     return false;
 }
 
-std::wstring ResolveAgainstExeFolder(const std::wstring& maybeRelative) {
+std::wstring ResolveAgainstDefaultSoundFolder(const std::wstring& maybeRelative) {
     if (IsAbsoluteOrRootedPath(maybeRelative)) return maybeRelative;
-    std::wstring base = GetExeFolder();
+    std::wstring base = kDefaultSoundFolder;
     if (!base.empty() && base.back() != L'\\' && base.back() != L'/') base += L'\\';
     return base + maybeRelative;
 }
@@ -96,9 +103,9 @@ void PrintUsage() {
     std::fwprintf(stderr,
         L"codex_pet_watch - bottom-left screen rectangle watcher\n\n"
         L"Usage:\n"
-        L"  codex_pet_watch.exe <sound.wav> [widthDip heightDip] [options]\n\n"
+        L"  codex_pet_watch.exe [sound.wav] [widthDip heightDip] [options]\n\n"
         L"Options:\n"
-        L"  --size=WxH              Rectangle size in logical DIP units. Default: 360x240\n"
+        L"  --size=WxH              Rectangle size in logical DIP units. Default: 80x80\n"
         L"  --poll-ms=N             Capture interval in milliseconds. Default: 1000\n"
         L"  --work-area             Anchor to monitor work area instead of full monitor.\n"
         L"  --follow-foreground     Re-anchor if the foreground-window monitor changes.\n"
@@ -106,7 +113,8 @@ void PrintUsage() {
         L"  --primary-monitor       Use primary monitor at launch.\n"
         L"  --help                  Show this help.\n\n"
         L"Notes:\n"
-        L"  Relative sound paths are loaded from the exe folder. PlaySound is WAV-oriented.\n"
+        L"  If no sound file is specified, ringout.wav is used.\n"
+        L"  Relative sound paths are loaded from C:\\Windows\\Media. PlaySound is WAV-oriented.\n"
         L"  Coordinates/capture use physical pixels internally; size args are logical DIP.\n");
 }
 
@@ -140,7 +148,7 @@ bool ParseArgs(int argc, wchar_t** argv, Config& cfg) {
             return false;
         } else if (StartsWith(a, L"--size=")) {
             if (!ParseSizeValue(a.substr(7), cfg.widthDip, cfg.heightDip)) {
-                std::fwprintf(stderr, L"Invalid --size value. Use --size=360x240.\n");
+                std::fwprintf(stderr, L"Invalid --size value. Use --size=80x80.\n");
                 return false;
             }
         } else if (StartsWith(a, L"--poll-ms=")) {
@@ -166,12 +174,7 @@ bool ParseArgs(int argc, wchar_t** argv, Config& cfg) {
         }
     }
 
-    if (positionals.empty()) {
-        PrintUsage();
-        return false;
-    }
-
-    cfg.soundPath = ResolveAgainstExeFolder(positionals[0]);
+    cfg.soundPath = ResolveAgainstDefaultSoundFolder(positionals.empty() ? kDefaultSoundFile : positionals[0]);
 
     if (positionals.size() >= 3) {
         if (!TryParseInt(positionals[1], cfg.widthDip) || !TryParseInt(positionals[2], cfg.heightDip)) {
@@ -288,8 +291,8 @@ RECT ComputeBottomLeftRectPx(const Config& cfg, const MonitorSnapshot& snap) {
     int wantedW = DipToPxX(cfg.widthDip, snap.dpiX);
     int wantedH = DipToPxY(cfg.heightDip, snap.dpiY);
 
-    int maxW = std::max(1, anchor.right - anchor.left);
-    int maxH = std::max(1, anchor.bottom - anchor.top);
+    int maxW = std::max(1, static_cast<int>(anchor.right - anchor.left));
+    int maxH = std::max(1, static_cast<int>(anchor.bottom - anchor.top));
     int w = std::min(wantedW, maxW);
     int h = std::min(wantedH, maxH);
 
@@ -381,6 +384,135 @@ void PlayConfiguredSound() {
     }
 }
 
+HICON CreateTrayStatusIcon() {
+    constexpr int iconSize = 32;
+    constexpr int statusSize = 7;
+    auto fallbackIcon = []() -> HICON {
+        HICON shared = LoadIconW(nullptr, IDI_APPLICATION);
+        return shared ? CopyIcon(shared) : nullptr;
+    };
+
+    HDC screenDc = GetDC(nullptr);
+    if (!screenDc) return fallbackIcon();
+
+    HDC memDc = CreateCompatibleDC(screenDc);
+    if (!memDc) {
+        ReleaseDC(nullptr, screenDc);
+        return fallbackIcon();
+    }
+
+    BITMAPINFO bmi{};
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = iconSize;
+    bmi.bmiHeader.biHeight = -iconSize;
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 32;
+    bmi.bmiHeader.biCompression = BI_RGB;
+
+    void* bits = nullptr;
+    HBITMAP colorBitmap = CreateDIBSection(screenDc, &bmi, DIB_RGB_COLORS, &bits, nullptr, 0);
+    if (!colorBitmap || !bits) {
+        if (colorBitmap) DeleteObject(colorBitmap);
+        DeleteDC(memDc);
+        ReleaseDC(nullptr, screenDc);
+        return fallbackIcon();
+    }
+
+    HGDIOBJ oldBitmap = SelectObject(memDc, colorBitmap);
+
+    HBRUSH bgBrush = CreateSolidBrush(RGB(28, 34, 42));
+    RECT fullRect{0, 0, iconSize, iconSize};
+    FillRect(memDc, &fullRect, bgBrush);
+    DeleteObject(bgBrush);
+
+    HPEN borderPen = CreatePen(PS_SOLID, 1, RGB(180, 190, 205));
+    HGDIOBJ oldPen = SelectObject(memDc, borderPen);
+    HGDIOBJ oldBrush = SelectObject(memDc, GetStockObject(NULL_BRUSH));
+    RoundRect(memDc, 2, 2, iconSize - 2, iconSize - 2, 7, 7);
+
+    HFONT font = CreateFontW(21, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                             OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+                             DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    HGDIOBJ oldFont = SelectObject(memDc, font);
+    SetBkMode(memDc, TRANSPARENT);
+    SetTextColor(memDc, RGB(235, 240, 248));
+    RECT textRect{6, 2, iconSize, iconSize - 2};
+    DrawTextW(memDc, L"C", 1, &textRect, DT_SINGLELINE | DT_VCENTER | DT_LEFT);
+    SelectObject(memDc, oldFont);
+    DeleteObject(font);
+
+    HBRUSH statusBrush = CreateSolidBrush(RGB(0, 220, 70));
+    RECT statusRect{0, iconSize - statusSize, statusSize, iconSize};
+    FillRect(memDc, &statusRect, statusBrush);
+    DeleteObject(statusBrush);
+
+    SelectObject(memDc, oldBrush);
+    SelectObject(memDc, oldPen);
+    DeleteObject(borderPen);
+    SelectObject(memDc, oldBitmap);
+
+    HBITMAP maskBitmap = CreateBitmap(iconSize, iconSize, 1, 1, nullptr);
+    ICONINFO iconInfo{};
+    iconInfo.fIcon = TRUE;
+    iconInfo.hbmColor = colorBitmap;
+    iconInfo.hbmMask = maskBitmap;
+    HICON icon = CreateIconIndirect(&iconInfo);
+
+    DeleteObject(maskBitmap);
+    DeleteObject(colorBitmap);
+    DeleteDC(memDc);
+    ReleaseDC(nullptr, screenDc);
+    return icon ? icon : fallbackIcon();
+}
+
+void RemoveTrayIcon() {
+    if (g_app.trayIconAdded) {
+        NOTIFYICONDATAW nid{};
+        nid.cbSize = sizeof(nid);
+        nid.hWnd = g_app.hwnd;
+        nid.uID = kTrayIconId;
+        Shell_NotifyIconW(NIM_DELETE, &nid);
+        g_app.trayIconAdded = false;
+    }
+    if (g_app.trayIcon) {
+        DestroyIcon(g_app.trayIcon);
+        g_app.trayIcon = nullptr;
+    }
+}
+
+bool AddTrayIcon(HWND hwnd) {
+    g_app.trayIcon = CreateTrayStatusIcon();
+
+    NOTIFYICONDATAW nid{};
+    nid.cbSize = sizeof(nid);
+    nid.hWnd = hwnd;
+    nid.uID = kTrayIconId;
+    nid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
+    nid.uCallbackMessage = kTrayIconMessage;
+    nid.hIcon = g_app.trayIcon;
+    wcscpy_s(nid.szTip, L"codex_pet_watch");
+
+    g_app.trayIconAdded = Shell_NotifyIconW(NIM_ADD, &nid) == TRUE;
+    if (g_app.trayIconAdded) {
+        nid.uVersion = NOTIFYICON_VERSION_4;
+        Shell_NotifyIconW(NIM_SETVERSION, &nid);
+    }
+    return g_app.trayIconAdded;
+}
+
+void ShowTrayMenu(HWND hwnd) {
+    POINT pt{};
+    GetCursorPos(&pt);
+
+    HMENU menu = CreatePopupMenu();
+    if (!menu) return;
+
+    AppendMenuW(menu, MF_STRING, kTrayExitCommand, L"Exit");
+    SetForegroundWindow(hwnd);
+    TrackPopupMenu(menu, TPM_RIGHTBUTTON | TPM_BOTTOMALIGN | TPM_LEFTALIGN, pt.x, pt.y, 0, hwnd, nullptr);
+    DestroyMenu(menu);
+}
+
 void EnsureOverlayPosition() {
     MonitorSnapshot next{};
     if (!ReadMonitorSnapshot(g_app.cfg, next)) return;
@@ -435,6 +567,18 @@ void CaptureTick() {
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
+    case kTrayIconMessage:
+        if (LOWORD(lParam) == WM_CONTEXTMENU || LOWORD(lParam) == WM_RBUTTONUP) {
+            ShowTrayMenu(hwnd);
+            return 0;
+        }
+        break;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == kTrayExitCommand) {
+            DestroyWindow(hwnd);
+            return 0;
+        }
+        break;
     case WM_NCHITTEST:
         return HTTRANSPARENT;
     case WM_PAINT: {
@@ -462,6 +606,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         break;
     case WM_DESTROY:
         KillTimer(hwnd, kCaptureTimerId);
+        RemoveTrayIcon();
         PostQuitMessage(0);
         return 0;
     }
@@ -505,13 +650,22 @@ HWND CreateOverlayWindow(HINSTANCE hInstance, const RECT& r) {
 
 } // namespace
 
-int wmain(int argc, wchar_t** argv) {
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int) {
     EnableBestEffortDpiAwareness();
+
+    int argc = 0;
+    LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+    if (!argv) {
+        MessageBoxW(nullptr, L"Could not parse command line.", L"codex_pet_watch", MB_OK | MB_ICONERROR);
+        return 1;
+    }
 
     Config cfg{};
     if (!ParseArgs(argc, argv, cfg)) {
+        LocalFree(argv);
         return 2;
     }
+    LocalFree(argv);
 
     DWORD soundAttrs = GetFileAttributesW(cfg.soundPath.c_str());
     if (soundAttrs == INVALID_FILE_ATTRIBUTES || (soundAttrs & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -527,12 +681,12 @@ int wmain(int argc, wchar_t** argv) {
     g_app.captureRectPx = ComputeBottomLeftRectPx(g_app.cfg, g_app.monitor);
     PrintMonitorAndRect(g_app.monitor, g_app.captureRectPx, g_app.cfg);
 
-    HINSTANCE hInstance = GetModuleHandleW(nullptr);
     g_app.hwnd = CreateOverlayWindow(hInstance, g_app.captureRectPx);
     if (!g_app.hwnd) {
         std::fwprintf(stderr, L"Could not create overlay window. LastError=%lu\n", GetLastError());
         return 4;
     }
+    AddTrayIcon(g_app.hwnd);
 
     // Establish initial baseline shortly after the overlay has been rendered.
     Sleep(100);
