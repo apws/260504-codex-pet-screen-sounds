@@ -83,6 +83,10 @@ build\codex_pet_watch.exe
 codex_pet_watch.exe [sound.wav] [widthDip heightDip] [options]
 ```
 
+## Windows SmartScreen
+
+Release builds are currently unsigned. Windows may show an "unrecognized app" / SmartScreen warning the first time you run the downloaded `.exe`. This is expected for this small local-build watcher; choose `More info` / `Run anyway` if you trust this repository and release asset. Later launches are usually normal after Windows has seen the file once.
+
 Examples:
 
 ```bat
