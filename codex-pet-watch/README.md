@@ -4,6 +4,8 @@ Tiny native pet pixel watcher applets.
 
 The idea is intentionally simple: watch a small bottom-left rectangle where the Codex pet sits, compare captured pixels, and play a sound when the pet changes visually.
 
+Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh145c)
+
 ## Platforms
 
 - `win32/` - working Windows 10/11 systray app, implemented with Win32/GDI `BitBlt`
