@@ -4,11 +4,13 @@ set -eu
 APP_NAME="CodexPetWatch"
 BUILD_DIR="build"
 APP_DIR="$BUILD_DIR/$APP_NAME.app"
+ZIP_NAME="codex_pet_watch-macosx-x64.zip"
+ZIP_PATH="$BUILD_DIR/$ZIP_NAME"
 CONTENTS="$APP_DIR/Contents"
 MACOS="$CONTENTS/MacOS"
 RESOURCES="$CONTENTS/Resources"
 
-rm -rf "$APP_DIR"
+rm -rf "$APP_DIR" "$ZIP_PATH"
 mkdir -p "$MACOS" "$RESOURCES"
 
 clang -fobjc-arc \
@@ -54,4 +56,10 @@ else
   echo "codesign not found; built unsigned app"
 fi
 
+(
+  cd "$BUILD_DIR"
+  zip -qry -X "$ZIP_NAME" "$APP_NAME.app"
+)
+
 echo "Built $APP_DIR"
+echo "Packaged $ZIP_PATH"

@@ -18,6 +18,12 @@ The Windows version is the current working workaround. It launches without args,
 
 The macOS version is source-prepared for local build on a Mac. Its build script bundles `shared/sounds/ringout.wav` into the `.app`.
 
+## macOS Download Note
+
+The macOS release asset is [codex_pet_watch-macosx-x64.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/0.20/codex_pet_watch-macosx-x64.zip). It contains `CodexPetWatch.app`, including the app executable and bundled shared `ringout.wav` next to it in `Contents/MacOS`.
+
+The app is ad-hoc signed. On first launch, choose the option to allow/configure Screen Recording permission later rather than quitting, then enable `CodexPetWatch` in Screen Recording settings and relaunch.
+
 ## Windows Download Note
 
 The release executable is currently unsigned. Windows SmartScreen may show an "unrecognized app" warning the first time you run the downloaded `.exe`. This is expected for this small local-build tool; choose `More info` / `Run anyway` if you trust this repository and release asset. Later launches are usually normal after Windows has seen the file once.

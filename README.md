@@ -16,6 +16,14 @@ The Windows app launches without args, lives in the system tray, watches a 24x24
 
 The release executable is unsigned, so Windows SmartScreen may show an "unrecognized app" warning the first time it runs. Use `More info` / `Run anyway` only if you trust this repository and release asset.
 
+## macOS Version
+
+- Download: [codex_pet_watch-macosx-x64.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/0.20/codex_pet_watch-macosx-x64.zip)
+- Release notes: [0.20](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/0.20)
+- Source and build notes: [codex-pet-watch/macosx](codex-pet-watch/macosx)
+
+The macOS app is distributed as a zip containing `CodexPetWatch.app`. The app bundle includes `Contents/MacOS/CodexPetWatch` and the shared `ringout.wav` next to the executable. The app is ad-hoc signed and macOS will require Screen Recording permission on first launch.
+
 ## Project Layout
 
 - [codex-pet-watch](codex-pet-watch) - shared project notes

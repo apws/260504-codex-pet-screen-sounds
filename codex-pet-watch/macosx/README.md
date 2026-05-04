@@ -69,6 +69,7 @@ Output:
 
 ```text
 build/CodexPetWatch.app
+build/codex_pet_watch-macosx-x64.zip
 ```
 
 The build script ad-hoc signs the app:
@@ -78,6 +79,13 @@ codesign --force --deep --sign - build/CodexPetWatch.app
 ```
 
 Keep this signing step in place. It helps macOS keep Screen Recording permission across rebuilds of the local app.
+
+The release zip contains `CodexPetWatch.app`; inside the bundle, `Contents/MacOS/CodexPetWatch` and `Contents/MacOS/ringout.wav` sit next to each other.
+
+## Download
+
+- Release asset: [codex_pet_watch-macosx-x64.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/0.20/codex_pet_watch-macosx-x64.zip)
+- Release notes: [0.20](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/0.20)
 
 ## Run
 
