@@ -44,7 +44,7 @@ cat > "$CONTENTS/Info.plist" <<'PLIST'
 PLIST
 
 if [ -f "../shared/sounds/ringout.wav" ]; then
-  cp "../shared/sounds/ringout.wav" "$RESOURCES/ringout.wav"
+  cp "../shared/sounds/ringout.wav" "$MACOS/ringout.wav"
 fi
 
 if command -v codesign >/dev/null 2>&1; then

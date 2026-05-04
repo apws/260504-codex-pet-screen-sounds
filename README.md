@@ -10,7 +10,7 @@ Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh14
 - Release notes: [v0.1.0](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.1.0)
 - Source and build notes: [codex-pet-watch/win32](codex-pet-watch/win32)
 
-The Windows app launches without args, lives in the system tray, watches a 24x24 DIP rectangle near the bottom-left of the screen, offset 56 px from the left edge and 72 px from the bottom edge, and plays `C:\Windows\Media\ringout.wav` when the watched pixels change. Right-click the tray icon and choose `Exit` to stop it.
+The Windows app launches without args, lives in the system tray, watches a 24x24 DIP rectangle near the bottom-left of the screen, offset 56 px from the left edge and 72 px from the bottom edge, and plays the bundled `ringout.wav` next to the executable when the watched pixels change. Right-click the tray icon and choose `Exit` to stop it.
 
 The release executable is unsigned, so Windows SmartScreen may show an "unrecognized app" warning the first time it runs. Use `More info` / `Run anyway` only if you trust this repository and release asset.
 

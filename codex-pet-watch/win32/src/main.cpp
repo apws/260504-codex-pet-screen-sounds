@@ -36,7 +36,6 @@
 namespace {
 
 constexpr wchar_t kWindowClassName[] = L"CodexPetAreaOverlayWindow";
-constexpr wchar_t kDefaultSoundFolder[] = L"C:\\Windows\\Media";
 constexpr wchar_t kDefaultSoundFile[] = L"ringout.wav";
 constexpr UINT_PTR kCaptureTimerId = 1;
 constexpr UINT kTrayIconMessage = WM_APP + 1;
@@ -96,9 +95,25 @@ bool IsAbsoluteOrRootedPath(const std::wstring& p) {
     return false;
 }
 
-std::wstring ResolveAgainstDefaultSoundFolder(const std::wstring& maybeRelative) {
+std::wstring GetExecutableFolder() {
+    std::vector<wchar_t> path(MAX_PATH);
+    DWORD len = 0;
+    for (;;) {
+        len = GetModuleFileNameW(nullptr, path.data(), static_cast<DWORD>(path.size()));
+        if (len == 0) return L".";
+        if (len < path.size() - 1) break;
+        path.resize(path.size() * 2);
+    }
+
+    std::wstring exePath(path.data(), len);
+    size_t slash = exePath.find_last_of(L"\\/");
+    if (slash == std::wstring::npos) return L".";
+    return exePath.substr(0, slash);
+}
+
+std::wstring ResolveAgainstExecutableFolder(const std::wstring& maybeRelative) {
     if (IsAbsoluteOrRootedPath(maybeRelative)) return maybeRelative;
-    std::wstring base = kDefaultSoundFolder;
+    std::wstring base = GetExecutableFolder();
     if (!base.empty() && base.back() != L'\\' && base.back() != L'/') base += L'\\';
     return base + maybeRelative;
 }
@@ -118,7 +133,7 @@ void PrintUsage() {
         L"  --help                  Show this help.\n\n"
         L"Notes:\n"
         L"  If no sound file is specified, ringout.wav is used.\n"
-        L"  Relative sound paths are loaded from C:\\Windows\\Media. PlaySound is WAV-oriented.\n"
+        L"  Relative sound paths are loaded from the executable folder. PlaySound is WAV-oriented.\n"
         L"  Coordinates/capture use physical pixels internally; size args are logical DIP.\n");
 }
 
@@ -178,7 +193,7 @@ bool ParseArgs(int argc, wchar_t** argv, Config& cfg) {
         }
     }
 
-    cfg.soundPath = ResolveAgainstDefaultSoundFolder(positionals.empty() ? kDefaultSoundFile : positionals[0]);
+    cfg.soundPath = ResolveAgainstExecutableFolder(positionals.empty() ? kDefaultSoundFile : positionals[0]);
 
     if (positionals.size() >= 3) {
         if (!TryParseInt(positionals[1], cfg.widthDip) || !TryParseInt(positionals[2], cfg.heightDip)) {

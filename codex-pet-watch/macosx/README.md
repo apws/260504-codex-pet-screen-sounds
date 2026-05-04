@@ -43,10 +43,10 @@ The build script copies the shared default sound:
 into:
 
 ```text
-build/CodexPetWatch.app/Contents/Resources/ringout.wav
+build/CodexPetWatch.app/Contents/MacOS/ringout.wav
 ```
 
-You can replace that shared file with your own `.wav` before building. You can also pass an explicit sound path when launching the app binary directly.
+You can replace that executable-adjacent `.wav` after building, replace the shared file before building, or pass an explicit sound path when launching the app binary directly. Relative sound paths are resolved against `Contents/MacOS`, the same folder as the `CodexPetWatch` executable.
 
 ## Build
 

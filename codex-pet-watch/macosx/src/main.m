@@ -17,6 +17,21 @@ static const CGFloat kBottomOffsetPixels = 72.0;
 @implementation AppConfig
 @end
 
+static NSString *ExecutableFolder(void) {
+    NSString *path = [[NSBundle mainBundle] executablePath];
+    if (path.length > 0) {
+        return [path stringByDeletingLastPathComponent];
+    }
+    NSString *argv0 = [[[NSProcessInfo processInfo] arguments] firstObject];
+    return [argv0 stringByDeletingLastPathComponent];
+}
+
+static NSString *ResolveAgainstExecutableFolder(NSString *path) {
+    if (path.length == 0) return path;
+    if (path.isAbsolutePath) return path;
+    return [ExecutableFolder() stringByAppendingPathComponent:path];
+}
+
 static void PrintUsage(void) {
     fprintf(stderr,
             "CodexPetWatch - bottom-left pet pixel watcher\n\n"
@@ -253,7 +268,9 @@ static BOOL ParseConfig(AppConfig *cfg) {
 - (void)prepareSound {
     NSString *path = self.config.soundPath;
     if (!path) {
-        path = [[NSBundle mainBundle] pathForResource:kDefaultSoundName ofType:@"wav"];
+        path = ResolveAgainstExecutableFolder([kDefaultSoundName stringByAppendingPathExtension:@"wav"]);
+    } else {
+        path = ResolveAgainstExecutableFolder(path);
     }
 
     if (path) {

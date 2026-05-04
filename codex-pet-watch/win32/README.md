@@ -27,15 +27,25 @@ The app uses Win32 `PlaySoundW`, so use a `.wav` file.
 
 If no sound file is specified, the app uses `ringout.wav`.
 
-Relative sound paths are resolved against `C:\Windows\Media`. For example, if you run:
+Builds copy the shared default sound from:
+
+```text
+../shared/sounds/ringout.wav
+```
+
+to the executable output folder as:
+
+```text
+ringout.wav
+```
+
+Relative sound paths are resolved against the executable folder. For example, if you run:
 
 ```bat
 codex_pet_watch.exe alert.wav
 ```
 
-then the app tries to play `C:\Windows\Media\alert.wav`.
-
-The repository also keeps a shared default sound at `../shared/sounds/ringout.wav` for platforms that bundle their own app resources. The Win32 release currently defaults to the Windows system media folder instead.
+then the app tries to play `alert.wav` from the same folder as `codex_pet_watch.exe`.
 
 ## Build with CMake + MSVC
 
@@ -51,6 +61,7 @@ Output:
 
 ```text
 build-x64\Release\codex_pet_watch.exe
+build-x64\Release\ringout.wav
 ```
 
 For x86:
@@ -63,6 +74,7 @@ Output:
 
 ```text
 build-x86\Release\codex_pet_watch.exe
+build-x86\Release\ringout.wav
 ```
 
 ## Build with plain `cl`
@@ -77,6 +89,7 @@ Output:
 
 ```text
 build\codex_pet_watch.exe
+build\ringout.wav
 ```
 
 ## Usage
