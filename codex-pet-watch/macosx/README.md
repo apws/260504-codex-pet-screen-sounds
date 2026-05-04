@@ -6,7 +6,7 @@ This mirrors the Win32 workaround:
 
 - runs as a menu-bar app with no Dock icon
 - shows a small `C` status icon with a green bottom-left square
-- watches a 48x48 point rectangle near the bottom-left of the main display, offset 32 px from the left edge and 48 px from the bottom edge
+- watches a 24x24 physical-pixel rectangle near the bottom-left of the main display, offset 56 px from the left edge and 72 px from the bottom edge
 - captures that rectangle once per second with CoreGraphics
 - compares bitmap bytes against the previous capture
 - plays a sound when any pixel changes
@@ -82,7 +82,7 @@ build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch [sound.wav] [width height] 
 Options:
 
 ```text
---size=WxH       Watch rectangle size in screen points. Default: 48x48
+--size=WxH       Watch rectangle size in physical pixels. Default: 24x24
 --poll-ms=N      Capture interval in milliseconds. Default: 1000
 --help           Show help
 ```
@@ -91,12 +91,12 @@ Examples:
 
 ```sh
 open build/CodexPetWatch.app
-build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch --size=48x48
+build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch --size=24x24
 build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch /path/to/custom.wav --poll-ms=1000
 ```
 
 ## Notes
 
 - This watches pixels, not Codex state. Pet animation can produce multiple rings.
-- The app anchors near the bottom-left of the main display at launch, offset 32 px from the left edge and 48 px from the bottom edge.
+- The app anchors near the bottom-left of the main display at launch, offset 56 physical pixels from the left edge and 72 physical pixels from the bottom edge. On Retina displays, the green overlay converts those pixel dimensions and offsets to AppKit screen points so it matches the captured pixels.
 - macOS menu-bar apps normally show their menu on click; choose `Exit` to quit.

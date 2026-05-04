@@ -2,7 +2,7 @@
 
 Tiny native pet pixel watcher applets.
 
-The idea is intentionally simple: watch a small 48x48 bottom-left rectangle where the Codex pet sits, offset 32 px from the left edge and 48 px from the bottom edge, compare captured pixels, and play a sound when the pet changes visually.
+The idea is intentionally simple: watch a small 24x24 bottom-left rectangle where the Codex pet sits, offset 56 px from the left edge and 72 px from the bottom edge, compare captured pixels, and play a sound when the pet changes visually.
 
 Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh145c)
 
@@ -12,7 +12,7 @@ Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh14
 - `macosx/` - Objective-C/AppKit macOS menu-bar app source
 - `shared/sounds/` - shared default sound asset
 
-The Windows version is the current working workaround. It launches without args, watches a 48x48 DIP rectangle offset 32 px from the left edge and 48 px from the bottom edge, plays `C:\Windows\Media\ringout.wav`, and exits from the tray menu.
+The Windows version is the current working workaround. It launches without args, watches a 24x24 DIP rectangle offset 56 px from the left edge and 72 px from the bottom edge, plays `C:\Windows\Media\ringout.wav`, and exits from the tray menu.
 
 The macOS version is source-prepared for local build on a Mac. Its build script bundles `shared/sounds/ringout.wav` into the `.app`.
 

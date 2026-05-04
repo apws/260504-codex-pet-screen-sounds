@@ -2,13 +2,15 @@
 #import <CoreGraphics/CoreGraphics.h>
 
 static NSString * const kDefaultSoundName = @"ringout";
-static const CGFloat kLeftOffsetPixels = 32.0;
-static const CGFloat kBottomOffsetPixels = 48.0;
+static const CGFloat kDefaultWidthPixels = 24.0;
+static const CGFloat kDefaultHeightPixels = 24.0;
+static const CGFloat kLeftOffsetPixels = 56.0;
+static const CGFloat kBottomOffsetPixels = 72.0;
 
 @interface AppConfig : NSObject
 @property(nonatomic, copy) NSString *soundPath;
-@property(nonatomic) NSInteger widthPoints;
-@property(nonatomic) NSInteger heightPoints;
+@property(nonatomic) NSInteger widthPixels;
+@property(nonatomic) NSInteger heightPixels;
 @property(nonatomic) NSTimeInterval pollSeconds;
 @end
 
@@ -21,7 +23,7 @@ static void PrintUsage(void) {
             "Usage:\n"
             "  CodexPetWatch [sound.wav] [width height] [options]\n\n"
             "Options:\n"
-            "  --size=WxH       Watch rectangle size in screen points. Default: 48x48\n"
+            "  --size=WxH       Watch rectangle size in physical pixels. Default: 24x24\n"
             "  --poll-ms=N      Capture interval in milliseconds. Default: 1000\n"
             "  --help           Show this help.\n");
 }
@@ -50,8 +52,8 @@ static BOOL ParseSize(NSString *s, NSInteger *outWidth, NSInteger *outHeight) {
 
 static BOOL ParseConfig(AppConfig *cfg) {
     cfg.soundPath = nil;
-    cfg.widthPoints = 48;
-    cfg.heightPoints = 48;
+    cfg.widthPixels = (NSInteger)kDefaultWidthPixels;
+    cfg.heightPixels = (NSInteger)kDefaultHeightPixels;
     cfg.pollSeconds = 1.0;
 
     NSMutableArray<NSString *> *positionals = [NSMutableArray array];
@@ -65,11 +67,11 @@ static BOOL ParseConfig(AppConfig *cfg) {
             NSInteger w = 0;
             NSInteger h = 0;
             if (!ParseSize([arg substringFromIndex:7], &w, &h)) {
-                fprintf(stderr, "Invalid --size value. Use --size=48x48.\n");
+                fprintf(stderr, "Invalid --size value. Use --size=24x24.\n");
                 return NO;
             }
-            cfg.widthPoints = w;
-            cfg.heightPoints = h;
+            cfg.widthPixels = w;
+            cfg.heightPixels = h;
         } else if ([arg hasPrefix:@"--poll-ms="]) {
             NSInteger pollMs = 0;
             if (!ParsePositiveInteger([arg substringFromIndex:10], &pollMs)) {
@@ -93,8 +95,8 @@ static BOOL ParseConfig(AppConfig *cfg) {
             return NO;
         }
         cfg.soundPath = positionals[0];
-        cfg.widthPoints = w;
-        cfg.heightPoints = h;
+        cfg.widthPixels = w;
+        cfg.heightPixels = h;
     } else if (positionals.count == 2) {
         fprintf(stderr, "Provide both width and height, or use --size=WxH.\n");
         return NO;
@@ -208,8 +210,8 @@ static BOOL ParseConfig(AppConfig *cfg) {
     CGRect boundsPoints = CGDisplayBounds(self.displayID);
     CGFloat scaleX = (CGFloat)CGDisplayPixelsWide(self.displayID) / MAX(boundsPoints.size.width, 1.0);
     CGFloat scaleY = (CGFloat)CGDisplayPixelsHigh(self.displayID) / MAX(boundsPoints.size.height, 1.0);
-    CGFloat widthPixels = MIN((CGFloat)self.config.widthPoints * scaleX, boundsPoints.size.width * scaleX);
-    CGFloat heightPixels = MIN((CGFloat)self.config.heightPoints * scaleY, boundsPoints.size.height * scaleY);
+    CGFloat widthPixels = MIN((CGFloat)self.config.widthPixels, boundsPoints.size.width * scaleX);
+    CGFloat heightPixels = MIN((CGFloat)self.config.heightPixels, boundsPoints.size.height * scaleY);
     CGFloat maxXOffsetPixels = MAX(0.0, boundsPoints.size.width * scaleX - widthPixels);
     CGFloat maxYOffsetPixels = MAX(0.0, boundsPoints.size.height * scaleY - heightPixels);
     CGFloat leftOffsetPixels = MIN(kLeftOffsetPixels, maxXOffsetPixels);
@@ -226,12 +228,14 @@ static BOOL ParseConfig(AppConfig *cfg) {
     if (!screen) return;
 
     CGFloat scale = MAX(screen.backingScaleFactor, 1.0);
+    CGFloat widthPoints = (CGFloat)self.config.widthPixels / scale;
+    CGFloat heightPoints = (CGFloat)self.config.heightPixels / scale;
     CGFloat leftOffsetPoints = kLeftOffsetPixels / scale;
     CGFloat bottomOffsetPoints = kBottomOffsetPixels / scale;
     NSRect frame = NSMakeRect(NSMinX(screen.frame) + leftOffsetPoints,
                               NSMinY(screen.frame) + bottomOffsetPoints,
-                              (CGFloat)self.config.widthPoints,
-                              (CGFloat)self.config.heightPoints);
+                              widthPoints,
+                              heightPoints);
     NSWindow *window = [[NSWindow alloc] initWithContentRect:frame
                                                    styleMask:NSWindowStyleMaskBorderless
                                                      backing:NSBackingStoreBuffered
