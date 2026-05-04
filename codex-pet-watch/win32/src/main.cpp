@@ -42,11 +42,15 @@ constexpr UINT_PTR kCaptureTimerId = 1;
 constexpr UINT kTrayIconMessage = WM_APP + 1;
 constexpr UINT kTrayIconId = 1;
 constexpr UINT kTrayExitCommand = 1001;
+constexpr int kDefaultWidthDip = 40;
+constexpr int kDefaultHeightDip = 40;
+constexpr int kLeftOffsetPx = 32;
+constexpr int kBottomOffsetPx = 48;
 
 struct Config {
     std::wstring soundPath;
-    int widthDip = 80;
-    int heightDip = 80;
+    int widthDip = kDefaultWidthDip;
+    int heightDip = kDefaultHeightDip;
     UINT pollMs = 1000;
     bool useWorkArea = false;
     bool followForegroundMonitor = false;
@@ -105,7 +109,7 @@ void PrintUsage() {
         L"Usage:\n"
         L"  codex_pet_watch.exe [sound.wav] [widthDip heightDip] [options]\n\n"
         L"Options:\n"
-        L"  --size=WxH              Rectangle size in logical DIP units. Default: 80x80\n"
+        L"  --size=WxH              Rectangle size in logical DIP units. Default: 40x40\n"
         L"  --poll-ms=N             Capture interval in milliseconds. Default: 1000\n"
         L"  --work-area             Anchor to monitor work area instead of full monitor.\n"
         L"  --follow-foreground     Re-anchor if the foreground-window monitor changes.\n"
@@ -148,7 +152,7 @@ bool ParseArgs(int argc, wchar_t** argv, Config& cfg) {
             return false;
         } else if (StartsWith(a, L"--size=")) {
             if (!ParseSizeValue(a.substr(7), cfg.widthDip, cfg.heightDip)) {
-                std::fwprintf(stderr, L"Invalid --size value. Use --size=80x80.\n");
+                std::fwprintf(stderr, L"Invalid --size value. Use --size=40x40.\n");
                 return false;
             }
         } else if (StartsWith(a, L"--poll-ms=")) {
@@ -297,10 +301,12 @@ RECT ComputeBottomLeftRectPx(const Config& cfg, const MonitorSnapshot& snap) {
     int h = std::min(wantedH, maxH);
 
     RECT r{};
-    r.left = anchor.left;
-    r.right = anchor.left + w;
-    r.bottom = anchor.bottom;
-    r.top = anchor.bottom - h;
+    int leftOffset = std::min(kLeftOffsetPx, std::max(0, maxW - w));
+    r.left = anchor.left + leftOffset;
+    r.right = r.left + w;
+    int bottomOffset = std::min(kBottomOffsetPx, std::max(0, maxH - h));
+    r.bottom = anchor.bottom - bottomOffset;
+    r.top = r.bottom - h;
     return r;
 }
 

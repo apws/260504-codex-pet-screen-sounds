@@ -1,1 +1,1 @@
-codex_pet_watch.exe --size=80x80 --poll-ms=1000
+codex_pet_watch.exe --size=40x40 --poll-ms=1000
