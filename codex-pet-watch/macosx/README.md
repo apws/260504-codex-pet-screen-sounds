@@ -34,6 +34,8 @@ If capture is blocked, the app can run but will not see the real screen pixels.
 
 On the first launch on a Mac, macOS may ask for Screen Recording permission. Choose the option to allow/configure it later, not `Quit`, then enable `CodexPetWatch` in Screen Recording settings and relaunch the app. After the app is allowed once, the ad-hoc signing step in `build.sh` lets that permission survive normal rebuilds.
 
+If a rebuilt app launches but does not ring even though the watched pixels are changing, refresh the Screen Recording entry: remove `CodexPetWatch` with the `-` button, add the rebuilt `build/CodexPetWatch.app` again with the `+` button, enable it, then quit and relaunch the app.
+
 ## Sound File
 
 The build script copies the shared default sound:
