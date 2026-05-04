@@ -3,7 +3,7 @@
 
 static NSString * const kDefaultSoundName = @"ringout";
 static const CGFloat kLeftOffsetPixels = 32.0;
-static const CGFloat kBottomOffsetPixels = 64.0;
+static const CGFloat kBottomOffsetPixels = 48.0;
 
 @interface AppConfig : NSObject
 @property(nonatomic, copy) NSString *soundPath;
@@ -21,7 +21,7 @@ static void PrintUsage(void) {
             "Usage:\n"
             "  CodexPetWatch [sound.wav] [width height] [options]\n\n"
             "Options:\n"
-            "  --size=WxH       Watch rectangle size in screen points. Default: 40x32\n"
+            "  --size=WxH       Watch rectangle size in screen points. Default: 48x48\n"
             "  --poll-ms=N      Capture interval in milliseconds. Default: 1000\n"
             "  --help           Show this help.\n");
 }
@@ -50,8 +50,8 @@ static BOOL ParseSize(NSString *s, NSInteger *outWidth, NSInteger *outHeight) {
 
 static BOOL ParseConfig(AppConfig *cfg) {
     cfg.soundPath = nil;
-    cfg.widthPoints = 40;
-    cfg.heightPoints = 32;
+    cfg.widthPoints = 48;
+    cfg.heightPoints = 48;
     cfg.pollSeconds = 1.0;
 
     NSMutableArray<NSString *> *positionals = [NSMutableArray array];
@@ -65,7 +65,7 @@ static BOOL ParseConfig(AppConfig *cfg) {
             NSInteger w = 0;
             NSInteger h = 0;
             if (!ParseSize([arg substringFromIndex:7], &w, &h)) {
-                fprintf(stderr, "Invalid --size value. Use --size=40x32.\n");
+                fprintf(stderr, "Invalid --size value. Use --size=48x48.\n");
                 return NO;
             }
             cfg.widthPoints = w;

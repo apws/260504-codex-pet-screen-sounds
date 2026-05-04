@@ -42,10 +42,10 @@ constexpr UINT_PTR kCaptureTimerId = 1;
 constexpr UINT kTrayIconMessage = WM_APP + 1;
 constexpr UINT kTrayIconId = 1;
 constexpr UINT kTrayExitCommand = 1001;
-constexpr int kDefaultWidthDip = 40;
-constexpr int kDefaultHeightDip = 32;
+constexpr int kDefaultWidthDip = 48;
+constexpr int kDefaultHeightDip = 48;
 constexpr int kLeftOffsetPx = 32;
-constexpr int kBottomOffsetPx = 64;
+constexpr int kBottomOffsetPx = 48;
 
 struct Config {
     std::wstring soundPath;
@@ -109,7 +109,7 @@ void PrintUsage() {
         L"Usage:\n"
         L"  codex_pet_watch.exe [sound.wav] [widthDip heightDip] [options]\n\n"
         L"Options:\n"
-        L"  --size=WxH              Rectangle size in logical DIP units. Default: 40x32\n"
+        L"  --size=WxH              Rectangle size in logical DIP units. Default: 48x48\n"
         L"  --poll-ms=N             Capture interval in milliseconds. Default: 1000\n"
         L"  --work-area             Anchor to monitor work area instead of full monitor.\n"
         L"  --follow-foreground     Re-anchor if the foreground-window monitor changes.\n"
@@ -152,7 +152,7 @@ bool ParseArgs(int argc, wchar_t** argv, Config& cfg) {
             return false;
         } else if (StartsWith(a, L"--size=")) {
             if (!ParseSizeValue(a.substr(7), cfg.widthDip, cfg.heightDip)) {
-                std::fwprintf(stderr, L"Invalid --size value. Use --size=40x32.\n");
+                std::fwprintf(stderr, L"Invalid --size value. Use --size=48x48.\n");
                 return false;
             }
         } else if (StartsWith(a, L"--poll-ms=")) {
