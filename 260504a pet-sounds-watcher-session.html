@@ -186,15 +186,30 @@
     <details>
       <summary>macOS Notes</summary>
       <div class="content">
-        <p>macOS version is planned but not implemented yet. Current placeholder lives at <code>codex-pet-watch/macosx/README.md</code>.</p>
+        <p>Original plan was a native macOS menu-bar version under <code>codex-pet-watch/macosx/</code>. Later in the session this was implemented as source-prepared Objective-C/AppKit code, but not compiled on Windows.</p>
         <p>Preferred design:</p>
         <ul>
-          <li>Separate native Swift/AppKit app, not a Win32 port.</li>
+          <li>Separate native Objective-C/AppKit app, not a Win32 port.</li>
           <li><code>NSStatusItem</code> menu-bar icon with <code>Exit</code>.</li>
           <li><code>CGDisplayCreateImage</code> / CoreGraphics crop of bottom-left <code>80x80</code> point rectangle.</li>
-          <li>AVFoundation or AppKit sound playback.</li>
+          <li><code>NSSound</code> playback, with bundled shared <code>ringout.wav</code> when built.</li>
           <li>Requires Screen Recording permission on macOS Catalina and newer.</li>
         </ul>
+      </div>
+    </details>
+
+    <details open>
+      <summary>Continuation: Release, Docs, And macOS Source</summary>
+      <div class="content timeline">
+        <p><span class="time">03:47</span> Evidence: commit <code>8adf0bc 2026-05-04T03:47:16+02:00 enhancements, refactorings, prepare for macosx version too</code>. Git was clean/synced afterward.</p>
+        <p><span class="time">~03:55</span> Created GitHub release <code>v0.1.0</code> at <code>https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.1.0</code> and uploaded <code>codex_pet_watch-win32-x64.exe</code>. Asset SHA-256 was <code>3F19B00898B0462DFC41EDED8C080DBCCDC6BE220B679067BBBA09E1EF27E8BB</code>.</p>
+        <p><span class="time">03:57</span> Evidence: commit <code>97dea29 Document Windows SmartScreen warning</code>. Added notes that the unsigned release exe may trigger Windows SmartScreen / "unrecognized app" on first run. The existing GitHub release notes were patched with the same warning.</p>
+        <p><span class="time">04:07</span> Evidence: commit <code>4a5c32f Add demo video link</code>. Added demo link <code>https://www.youtube.com/watch?v=YI3Urzh145c</code> near the top of <code>codex-pet-watch/README.md</code>.</p>
+        <p><span class="time">04:11</span> Evidence: commit <code>32a423b Add root README with Win32 links</code>. Added repository-root <code>README.md</code> with a short workaround description, Win32 download link, release link, source link, SmartScreen note, and platform layout.</p>
+        <p><span class="time">~04:20</span> Updated the local <code>savechat</code> skill template and this HTML log after user noticed timeline alignment issues. First grid attempt broke inline <code>code</code> layout; fixed with a safer absolute-positioned fixed time column.</p>
+        <p><span class="time">~05:00</span> Discussed old MacBook Air upgrade path: High Sierra 10.13.6 to Monterey 12, likely MacBook Air 2017, 8 GB RAM, 128 GB SSD with about 73 GB free. User confirmed only system/legacy 32-bit items appeared, and Ukelele keyboard remapper was the important app to preserve/back up.</p>
+        <p><span class="time">~06:00</span> User hit Apple ID/admin password recovery friction while trying to download/install Monterey. Recovery path went through iPhone SE update to iOS 18 and Apple ID credential change. Monterey installation eventually started with about 2 hours remaining.</p>
+        <p><span class="time">07:57</span> Evidence: commit <code>7873bb0 Prepare macOS pet watcher source</code>. Added Objective-C/AppKit macOS source, build script, shared default <code>ringout.wav</code>, and docs. Repo was clean/synced afterward.</p>
       </div>
     </details>
 
@@ -212,7 +227,13 @@ Get-Process codex_pet_watch -ErrorAction SilentlyContinue | Stop-Process -Force
 
 # Run rebuilt Win32 watcher from new location
 cd C:\Users\petra\Versioning\~prj\260504-codex-pet-screen-sounds\codex-pet-watch\win32
-.\build-x64\Release\codex_pet_watch.exe</pre>
+.\build-x64\Release\codex_pet_watch.exe
+
+# Build macOS version on a Mac
+cd codex-pet-watch/macosx
+chmod +x build.sh
+./build.sh
+open build/CodexPetWatch.app</pre>
       </div>
     </details>
 
@@ -228,10 +249,10 @@ cd C:\Users\petra\Versioning\~prj\260504-codex-pet-screen-sounds\codex-pet-watch
       <summary>Open Follow-Ups</summary>
       <div class="content">
         <ul>
-          <li>Implement macOS native app under <code>codex-pet-watch/macosx/</code>.</li>
+          <li>Compile and test macOS Objective-C app on the upgraded MacBook Air / Monterey machine.</li>
           <li>Optionally add a debounce/cooldown such as <code>--cooldown-ms=2000</code> if rings become too chatty.</li>
           <li>Optionally add a diagnostic popup/mode that shows detected monitor size, DPI, and watch rectangle.</li>
-          <li>Stage/commit the platform folder move when ready.</li>
+          <li>If macOS build succeeds, consider creating a macOS release asset alongside the Win32 release.</li>
         </ul>
       </div>
     </details>
