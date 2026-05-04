@@ -1,18 +1,102 @@
 # codex-pet-watch macOS
 
-Planned native macOS version of the pet pixel watcher.
+Native macOS menu-bar version of the pet pixel watcher.
 
-Expected shape:
+This mirrors the Win32 workaround:
 
-- AppKit menu-bar app
-- `Exit` menu item
-- bottom-left 80x80 point watch rectangle by default
-- CoreGraphics screen capture for the watched rectangle
-- bitmap byte comparison once per second
-- sound on pixel change
+- runs as a menu-bar app with no Dock icon
+- shows a small `C` status icon with a green bottom-left square
+- watches an 80x80 point rectangle at the bottom-left of the main display
+- captures that rectangle once per second with CoreGraphics
+- compares bitmap bytes against the previous capture
+- plays a sound when any pixel changes
+- has a menu with `Exit`
 
-macOS notes:
+## Platform
 
-- Newer macOS versions require Screen Recording permission for pixel capture.
-- A local build should only need free Xcode Command Line Tools.
-- This should be implemented as a separate native Swift/AppKit app rather than a port of the Win32 source.
+Designed as a small Objective-C/AppKit app. The intended minimum target is macOS High Sierra 10.13, while Monterey also works and is easier to develop on.
+
+Newer macOS versions require Screen Recording permission for pixel capture:
+
+```text
+System Settings -> Privacy & Security -> Screen Recording
+```
+
+On older macOS:
+
+```text
+System Preferences -> Security & Privacy -> Privacy -> Screen Recording
+```
+
+If capture is blocked, the app can run but will not see the real screen pixels.
+
+## Sound File
+
+The build script copies the shared default sound:
+
+```text
+../shared/sounds/ringout.wav
+```
+
+into:
+
+```text
+build/CodexPetWatch.app/Contents/Resources/ringout.wav
+```
+
+You can replace that shared file with your own `.wav` before building. You can also pass an explicit sound path when launching the app binary directly.
+
+## Build
+
+Install Xcode Command Line Tools:
+
+```sh
+xcode-select --install
+```
+
+Then from this folder:
+
+```sh
+chmod +x build.sh
+./build.sh
+```
+
+Output:
+
+```text
+build/CodexPetWatch.app
+```
+
+## Run
+
+```sh
+open build/CodexPetWatch.app
+```
+
+To run with options:
+
+```sh
+build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch [sound.wav] [width height] [options]
+```
+
+Options:
+
+```text
+--size=WxH       Watch rectangle size in screen points. Default: 80x80
+--poll-ms=N      Capture interval in milliseconds. Default: 1000
+--help           Show help
+```
+
+Examples:
+
+```sh
+open build/CodexPetWatch.app
+build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch --size=80x80
+build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch /path/to/custom.wav --poll-ms=1000
+```
+
+## Notes
+
+- This watches pixels, not Codex state. Pet animation can produce multiple rings.
+- The app anchors to the bottom-left of the main display at launch.
+- macOS menu-bar apps normally show their menu on click; choose `Exit` to quit.

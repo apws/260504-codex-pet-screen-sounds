@@ -9,9 +9,12 @@ Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh14
 ## Platforms
 
 - `win32/` - working Windows 10/11 systray app, implemented with Win32/GDI `BitBlt`
-- `macosx/` - planned macOS menu-bar version
+- `macosx/` - Objective-C/AppKit macOS menu-bar app source
+- `shared/sounds/` - shared default sound asset
 
 The Windows version is the current working workaround. It launches without args, watches an 80x80 DIP rectangle, plays `C:\Windows\Media\ringout.wav`, and exits from the tray menu.
+
+The macOS version is source-prepared for local build on a Mac. Its build script bundles `shared/sounds/ringout.wav` into the `.app`.
 
 ## Windows Download Note
 

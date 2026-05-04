@@ -1,6 +1,6 @@
 # Codex Pet Screen Sounds
 
-Small native workaround tool that watches the Codex desktop pet pixels and plays a Windows sound when the pet changes visually. It is intentionally simple: capture a tiny bottom-left rectangle, compare pixels once per second, and ring when anything changes.
+Small native workaround tool that watches the Codex desktop pet pixels and plays a sound when the pet changes visually. It is intentionally simple: capture a tiny bottom-left rectangle, compare pixels once per second, and ring when anything changes.
 
 Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh145c)
 
@@ -18,4 +18,5 @@ The release executable is unsigned, so Windows SmartScreen may show an "unrecogn
 
 - [codex-pet-watch](codex-pet-watch) - shared project notes
 - [codex-pet-watch/win32](codex-pet-watch/win32) - working Windows 10/11 systray app
-- [codex-pet-watch/macosx](codex-pet-watch/macosx) - planned macOS menu-bar version
+- [codex-pet-watch/macosx](codex-pet-watch/macosx) - Objective-C/AppKit macOS menu-bar app source
+- [codex-pet-watch/shared/sounds](codex-pet-watch/shared/sounds) - shared default sound asset

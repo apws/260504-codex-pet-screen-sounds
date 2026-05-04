@@ -35,6 +35,8 @@ codex_pet_watch.exe alert.wav
 
 then the app tries to play `C:\Windows\Media\alert.wav`.
 
+The repository also keeps a shared default sound at `../shared/sounds/ringout.wav` for platforms that bundle their own app resources. The Win32 release currently defaults to the Windows system media folder instead.
+
 ## Build with CMake + MSVC
 
 Open a **Developer Command Prompt for Visual Studio** in this folder.
