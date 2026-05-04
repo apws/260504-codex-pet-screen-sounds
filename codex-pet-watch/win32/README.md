@@ -2,6 +2,8 @@
 
 Tiny Win32/GDI watcher for a `codex-pet-area` rectangle near the bottom-left of the active monitor, offset 56 px from the left edge and 72 px from the bottom edge.
 
+**Detection rectangle:** `SIZE=24x24`, `X=56 px` from the left edge, `Y=72 px` from the bottom edge.
+
 It:
 
 - enables best-effort Per-Monitor DPI Awareness v2

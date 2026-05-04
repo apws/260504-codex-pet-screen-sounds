@@ -2,6 +2,8 @@
 
 Native macOS menu-bar version of the pet pixel watcher.
 
+**Detection rectangle:** `SIZE=24x24`, `X=56 px` from the left edge, `Y=72 px` from the bottom edge.
+
 This mirrors the Win32 workaround:
 
 - runs as a menu-bar app with no Dock icon

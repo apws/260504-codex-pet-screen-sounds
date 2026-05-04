@@ -2,6 +2,8 @@
 
 Small native workaround tool that watches the Codex desktop pet pixels and plays a sound when the pet changes visually. It is intentionally simple: capture a tiny 24x24 bottom-left rectangle offset 56 px from the left edge and 72 px from the bottom edge, compare pixels once per second, and ring when anything changes.
 
+**Detection rectangle:** `SIZE=24x24`, `X=56 px` from the left edge, `Y=72 px` from the bottom edge.
+
 Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh145c)
 
 ## Win32 Version

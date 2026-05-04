@@ -4,6 +4,8 @@ Tiny native pet pixel watcher applets.
 
 The idea is intentionally simple: watch a small 24x24 bottom-left rectangle where the Codex pet sits, offset 56 px from the left edge and 72 px from the bottom edge, compare captured pixels, and play a sound when the pet changes visually.
 
+**Detection rectangle:** `SIZE=24x24`, `X=56 px` from the left edge, `Y=72 px` from the bottom edge.
+
 Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh145c)
 
 ## Platforms
