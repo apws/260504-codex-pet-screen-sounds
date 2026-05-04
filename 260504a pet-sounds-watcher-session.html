@@ -187,11 +187,11 @@
       <summary>macOS Notes</summary>
       <div class="content">
         <p>Original plan was a native macOS menu-bar version under <code>codex-pet-watch/macosx/</code>. Later in the session this was implemented as source-prepared Objective-C/AppKit code, but not compiled on Windows.</p>
-        <p>Preferred design:</p>
+        <p>Implemented design:</p>
         <ul>
           <li>Separate native Objective-C/AppKit app, not a Win32 port.</li>
           <li><code>NSStatusItem</code> menu-bar icon with <code>Exit</code>.</li>
-          <li><code>CGDisplayCreateImage</code> / CoreGraphics crop of bottom-left <code>80x80</code> point rectangle.</li>
+          <li><code>CGDisplayCreateImage</code> / CoreGraphics crop of a bottom-left pet rectangle.</li>
           <li><code>NSSound</code> playback, with bundled shared <code>ringout.wav</code> when built.</li>
           <li>Requires Screen Recording permission on macOS Catalina and newer.</li>
         </ul>
@@ -213,6 +213,20 @@
       </div>
     </details>
 
+    <details open>
+      <summary>Continuation: Rectangle Tuning And Pushes</summary>
+      <div class="content timeline">
+        <p><span class="time">~11:00</span> User asked to move the pet icon detection rectangle slightly higher. First implementation raised both Win32 and macOS rectangles by <code>20 px</code> from the bottom edge, with README updates. Win32 x64 build succeeded after bypassing the broken MSYS/devkitPro <code>cmake</code> and allowing Visual Studio/MSBuild to read Windows SDK metadata under AppData.</p>
+        <p><span class="time">~11:05</span> Repository test pass: Win32 x64 and x86 CMake configure/build succeeded; macOS build was not run on Windows. A brief x64 GUI smoke launch was performed and the launched process was stopped.</p>
+        <p><span class="time">~11:10</span> A temporary topmost WinForms speech bubble was shown near the bottom-left watch area to test pixel detection. It changed screen pixels but did not make the pet itself speak; user later noted the pet could be silent if it only animates on hover, because this watcher sees only pixels, not Codex state.</p>
+        <p><span class="time">~11:15</span> User requested a smaller rectangle: default detection/render rectangle changed to <code>40x40</code>, initially offset <code>32 px</code> from left and bottom. Both Win32 and macOS source and docs were kept aligned; <code>win32/run.cmd</code> and <code>pet-watch-smoke.out</code> were updated too.</p>
+        <p><span class="time">~11:25</span> User requested vertical offset <code>Y=48</code>. The rectangle was later adjusted again to <code>64x64</code>, then to the current <code>40x32</code>, <code>X=32 px</code> from the left edge, <code>Y=64 px</code> from the bottom edge. Win32 uses <code>kLeftOffsetPx = 32</code> and <code>kBottomOffsetPx = 64</code>; macOS uses matching pixel constants and converts overlay offsets to screen points for Retina/non-Retina displays.</p>
+        <p><span class="time">~11:27</span> Rebuilt Win32 x64; one attempt failed with <code>LNK1104</code> because the running watcher locked <code>codex_pet_watch.exe</code>. Stopped <code>codex_pet_watch</code>, rebuilt successfully, and relaunched the fresh x64 watcher. Later rebuilt both x64 and x86 Release successfully after stopping the running watcher.</p>
+        <p><span class="time">11:30</span> Evidence: commit <code>7f53bb0 2026-05-04T11:30:20+02:00 Adjust pet watch rectangle</code>. Included Win32/macOS source changes, docs, <code>run.cmd</code>, and smoke output. Pushed <code>main</code> to <code>origin</code>.</p>
+        <p><span class="time">11:32</span> Evidence: commit <code>a8752cd 2026-05-04T11:32:12+02:00 Update session log</code>. Added earlier continuation notes to this HTML log and pushed <code>main</code> to <code>origin</code>. Repo was clean afterward before this savechat update.</p>
+      </div>
+    </details>
+
     <details>
       <summary>Reusable Commands</summary>
       <div class="content">
@@ -228,6 +242,10 @@ Get-Process codex_pet_watch -ErrorAction SilentlyContinue | Stop-Process -Force
 # Run rebuilt Win32 watcher from new location
 cd C:\Users\petra\Versioning\~prj\260504-codex-pet-screen-sounds\codex-pet-watch\win32
 .\build-x64\Release\codex_pet_watch.exe
+
+# Rebuild Win32 x64/x86 with Visual Studio CMake directly
+&amp; 'C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe' --build build-x64 --config Release
+&amp; 'C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe' --build build-x86 --config Release
 
 # Build macOS version on a Mac
 cd codex-pet-watch/macosx
@@ -250,6 +268,7 @@ open build/CodexPetWatch.app</pre>
       <div class="content">
         <ul>
           <li>Compile and test macOS Objective-C app on the upgraded MacBook Air / Monterey machine.</li>
+          <li>If further rectangle tuning is needed, current constants live in <code>win32/src/main.cpp</code> and <code>macosx/src/main.m</code>: size defaults are <code>40x32</code>, left offset is <code>32 px</code>, bottom offset is <code>64 px</code>.</li>
           <li>Optionally add a debounce/cooldown such as <code>--cooldown-ms=2000</code> if rings become too chatty.</li>
           <li>Optionally add a diagnostic popup/mode that shows detected monitor size, DPI, and watch rectangle.</li>
           <li>If macOS build succeeds, consider creating a macOS release asset alongside the Win32 release.</li>

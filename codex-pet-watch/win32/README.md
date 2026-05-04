@@ -1,6 +1,6 @@
 # codex-pet-watch
 
-Tiny Win32/GDI watcher for a `codex-pet-area` rectangle near the bottom-left of the active monitor, offset 32 px from the left edge and 48 px from the bottom edge.
+Tiny Win32/GDI watcher for a `codex-pet-area` rectangle near the bottom-left of the active monitor, offset 32 px from the left edge and 64 px from the bottom edge.
 
 It:
 
@@ -93,16 +93,16 @@ Examples:
 
 ```bat
 codex_pet_watch.exe alert.wav
-codex_pet_watch.exe --size=40x40
-codex_pet_watch.exe alert.wav 40 40
+codex_pet_watch.exe --size=40x32
+codex_pet_watch.exe alert.wav 40 32
 codex_pet_watch.exe alert.wav --size=480x280 --poll-ms=1000 --work-area
-codex_pet_watch.exe alert.wav --size=40x40 --follow-foreground
+codex_pet_watch.exe alert.wav --size=40x32 --follow-foreground
 ```
 
 Options:
 
 ```text
---size=WxH              Rectangle size in logical DIP units. Default: 40x40
+--size=WxH              Rectangle size in logical DIP units. Default: 40x32
 --poll-ms=N             Capture interval in milliseconds. Default: 1000
 --work-area             Anchor to monitor work area instead of full monitor
 --follow-foreground     Re-anchor if the foreground-window monitor changes
@@ -119,7 +119,7 @@ The app accepts rectangle size in logical DIP units, then converts to physical p
 physical_px = logical_dip * monitor_dpi / 96
 ```
 
-Internally, the overlay position and GDI capture rectangle use physical desktop pixels, with the rectangle offset 32 px from the selected anchor area's left edge and 48 px from its bottom edge. This matters for multi-monitor setups, DPI scaling, and monitors with negative coordinates.
+Internally, the overlay position and GDI capture rectangle use physical desktop pixels, with the rectangle offset 32 px from the selected anchor area's left edge and 64 px from its bottom edge. This matters for multi-monitor setups, DPI scaling, and monitors with negative coordinates.
 
 The default monitor selection is the monitor containing the foreground window at launch. If there is no foreground window, it falls back to the cursor monitor, then primary monitor.
 
