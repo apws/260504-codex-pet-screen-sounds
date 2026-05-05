@@ -2,13 +2,15 @@
 
 Native macOS menu-bar version of the pet pixel watcher.
 
-**Detection rectangle:** `SIZE=24x24`, `X=56 px` from the left edge, `Y=72 px` from the bottom edge.
+**Detection rectangle:** `SIZE=16x16`, `X=64 px` from the left edge, `Y=80 px` from the bottom edge.
+
+This keeps the same top-right target area while trimming the busier animated pet pixels from the old bottom-left corner; the default matches the Win32 watcher.
 
 This mirrors the Win32 workaround:
 
 - runs as a menu-bar app with no Dock icon
 - shows a small `C` status icon with a green bottom-left square
-- watches a 24x24 physical-pixel rectangle near the bottom-left of the main display, offset 56 px from the left edge and 72 px from the bottom edge
+- watches a 16x16 physical-pixel rectangle near the bottom-left of the main display, offset 64 px from the left edge and 80 px from the bottom edge
 - captures that rectangle once per second with CoreGraphics
 - compares bitmap bytes against the previous capture
 - plays a sound when any pixel changes
@@ -71,7 +73,7 @@ Output:
 
 ```text
 build/CodexPetWatch.app
-build/codex_pet_watch-macosx-x64-v0.20.zip
+build/codex_pet_watch-macosx-x64-v0.30.zip
 ```
 
 The build script ad-hoc signs the app:
@@ -86,8 +88,8 @@ The release zip contains `CodexPetWatch.app`; inside the bundle, `Contents/MacOS
 
 ## Download
 
-- Release asset: [codex_pet_watch-macosx-x64-v0.20.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.20/codex_pet_watch-macosx-x64-v0.20.zip)
-- Release notes: [v0.20](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.20)
+- Release asset: [codex_pet_watch-macosx-x64-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-macosx-x64-v0.30.zip)
+- Release notes: [v0.30](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.30)
 
 ## Run
 
@@ -104,7 +106,7 @@ build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch [sound.wav] [width height] 
 Options:
 
 ```text
---size=WxH       Watch rectangle size in physical pixels. Default: 24x24
+--size=WxH       Watch rectangle size in physical pixels. Default: 16x16
 --poll-ms=N      Capture interval in milliseconds. Default: 1000
 --help           Show help
 ```
@@ -113,12 +115,12 @@ Examples:
 
 ```sh
 open build/CodexPetWatch.app
-build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch --size=24x24
+build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch --size=16x16
 build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch /path/to/custom.wav --poll-ms=1000
 ```
 
 ## Notes
 
 - This watches pixels, not Codex state. Pet animation can produce multiple rings.
-- The app anchors near the bottom-left of the main display at launch, offset 56 physical pixels from the left edge and 72 physical pixels from the bottom edge. On Retina displays, the green overlay converts those pixel dimensions and offsets to AppKit screen points so it matches the captured pixels.
+- The app anchors near the bottom-left of the main display at launch, offset 64 physical pixels from the left edge and 80 physical pixels from the bottom edge. On Retina displays, the green overlay converts those pixel dimensions and offsets to AppKit screen points so it matches the captured pixels.
 - macOS menu-bar apps normally show their menu on click; choose `Exit` to quit.

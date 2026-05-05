@@ -1,8 +1,8 @@
 # codex-pet-watch
 
-Tiny Win32/GDI watcher for a `codex-pet-area` rectangle near the bottom-left of the active monitor, offset 56 px from the left edge and 72 px from the bottom edge.
+Tiny Win32/GDI watcher for a `codex-pet-area` rectangle near the bottom-left of the active monitor, offset 64 px from the left edge and 80 px from the bottom edge.
 
-**Detection rectangle:** `SIZE=24x24`, `X=56 px` from the left edge, `Y=72 px` from the bottom edge.
+**Detection rectangle:** `SIZE=16x16`, `X=64 px` from the left edge, `Y=80 px` from the bottom edge.
 
 It:
 
@@ -108,16 +108,16 @@ Examples:
 
 ```bat
 codex_pet_watch.exe alert.wav
-codex_pet_watch.exe --size=24x24
-codex_pet_watch.exe alert.wav 24 24
+codex_pet_watch.exe --size=16x16
+codex_pet_watch.exe alert.wav 16 16
 codex_pet_watch.exe alert.wav --size=480x280 --poll-ms=1000 --work-area
-codex_pet_watch.exe alert.wav --size=24x24 --follow-foreground
+codex_pet_watch.exe alert.wav --size=16x16 --follow-foreground
 ```
 
 Options:
 
 ```text
---size=WxH              Rectangle size in logical DIP units. Default: 24x24
+--size=WxH              Rectangle size in logical DIP units. Default: 16x16
 --poll-ms=N             Capture interval in milliseconds. Default: 1000
 --work-area             Anchor to monitor work area instead of full monitor
 --follow-foreground     Re-anchor if the foreground-window monitor changes
@@ -134,7 +134,7 @@ The app accepts rectangle size in logical DIP units, then converts to physical p
 physical_px = logical_dip * monitor_dpi / 96
 ```
 
-Internally, the overlay position and GDI capture rectangle use physical desktop pixels, with the rectangle offset 56 px from the selected anchor area's left edge and 72 px from its bottom edge. This matters for multi-monitor setups, DPI scaling, and monitors with negative coordinates.
+Internally, the overlay position and GDI capture rectangle use physical desktop pixels, with the rectangle offset 64 px from the selected anchor area's left edge and 80 px from its bottom edge. This matters for multi-monitor setups, DPI scaling, and monitors with negative coordinates.
 
 The default monitor selection is the monitor containing the foreground window at launch. If there is no foreground window, it falls back to the cursor monitor, then primary monitor.
 

@@ -2,10 +2,10 @@
 #import <CoreGraphics/CoreGraphics.h>
 
 static NSString * const kDefaultSoundName = @"ringout";
-static const CGFloat kDefaultWidthPixels = 24.0;
-static const CGFloat kDefaultHeightPixels = 24.0;
-static const CGFloat kLeftOffsetPixels = 56.0;
-static const CGFloat kBottomOffsetPixels = 72.0;
+static const CGFloat kDefaultWidthPixels = 16.0;
+static const CGFloat kDefaultHeightPixels = 16.0;
+static const CGFloat kLeftOffsetPixels = 64.0;
+static const CGFloat kBottomOffsetPixels = 80.0;
 
 @interface AppConfig : NSObject
 @property(nonatomic, copy) NSString *soundPath;
@@ -38,7 +38,7 @@ static void PrintUsage(void) {
             "Usage:\n"
             "  CodexPetWatch [sound.wav] [width height] [options]\n\n"
             "Options:\n"
-            "  --size=WxH       Watch rectangle size in physical pixels. Default: 24x24\n"
+            "  --size=WxH       Watch rectangle size in physical pixels. Default: 16x16\n"
             "  --poll-ms=N      Capture interval in milliseconds. Default: 1000\n"
             "  --help           Show this help.\n");
 }
@@ -82,7 +82,7 @@ static BOOL ParseConfig(AppConfig *cfg) {
             NSInteger w = 0;
             NSInteger h = 0;
             if (!ParseSize([arg substringFromIndex:7], &w, &h)) {
-                fprintf(stderr, "Invalid --size value. Use --size=24x24.\n");
+                fprintf(stderr, "Invalid --size value. Use --size=16x16.\n");
                 return NO;
             }
             cfg.widthPixels = w;
