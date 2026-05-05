@@ -229,6 +229,22 @@
       </div>
     </details>
 
+    <details open>
+      <summary>Continuation: GitHub Releases, Sound Bundling, And Codex Lessons</summary>
+      <div class="content timeline">
+        <p><span class="time">~14:00</span> User clarified that <code>devkitPro</code> on PATH is mostly a PowerPC/devkit toolchain and should not leak into every project build. Lesson: project scripts should pin fragile tools such as Visual Studio CMake by absolute path or construct a minimal project-local PATH instead of trusting a large global PATH.</p>
+        <p><span class="time">14:05</span> Evidence: commit <code>ec5ff06 2026-05-04T14:05:22+02:00 common ringout.wav</code>. Shared sound asset exists under <code>codex-pet-watch/shared/sounds/ringout.wav</code>.</p>
+        <p><span class="time">14:15</span> Evidence: commit <code>aa9edaf 2026-05-04T14:15:41+02:00 Bundle shared ringout sound</code>. Win32 was changed to resolve default/relative sounds beside <code>codex_pet_watch.exe</code>, and CMake/plain <code>cl</code> builds copy shared <code>ringout.wav</code> beside the executable.</p>
+        <p><span class="time">14:26</span> Evidence: commit <code>5f7683d 2026-05-04T14:26:02+02:00 Document detection rectangle params</code>. All README files received an explicit near-top note: <code>SIZE=24x24</code>, <code>X=56 px</code>, <code>Y=72 px</code>.</p>
+        <p><span class="time">14:33</span> Evidence: commit <code>e77a525 2026-05-04T14:33:33+02:00 Add macOS release zip packaging</code>. macOS release packaging support was added from the macOS side.</p>
+        <p><span class="time">14:46</span> Evidence: commit <code>f31a914 2026-05-04T14:46:54+02:00 Document macOS permission refresh workaround</code>. Added notes about preserving/recovering Screen Recording permission after rebuilds.</p>
+        <p><span class="time">~16:30</span> User noticed release/tag confusion: a plain <code>0.20</code> tag existed, and a bad commit <code>45d55c9 release-0.20</code> had tracked zip artifacts in Git history. Evidence: commit <code>0df2a81 2026-05-04T16:34:38+02:00 Revert "release-0.20"</code> reverted that tracked-artifact commit. At save time, local <code>main</code> is clean and aligned with <code>origin/main</code> at <code>0df2a81</code>.</p>
+        <p><span class="time">~17:00</span> GitHub CLI auth was fixed on Windows. A proper GitHub Release <code>v0.20</code> was created with Win32 zip assets <code>codex_pet_watch-win32-x64-v0.20.zip</code> and <code>codex_pet_watch-win32-x86-v0.20.zip</code>. The local <code>artifacts/v0.20/</code> folder contains these temporary upload zips and staging folders; it is untracked and should stay out of Git.</p>
+        <p><span class="time">~17:10</span> Discussed whether this chat is visible on the macOS Codex app. Do not assume live app chat sync; durable project memory should be files in the repo, especially this curated HTML log. Literal full transcript export is not exposed to the agent; <code>savechat</code> creates curated educational records instead.</p>
+        <p><span class="time">~17:15</span> User reflected that the <code>savechat</code> helper should probably live as a separate reusable/global Codex skill repo rather than being copied into each project. Recommendation: keep canonical skill globally installed, let it write project-local logs, and optionally add tiny project-specific savechat notes when needed.</p>
+      </div>
+    </details>
+
     <details>
       <summary>Reusable Commands</summary>
       <div class="content">
@@ -253,7 +269,10 @@ cd C:\Users\petra\Versioning\~prj\260504-codex-pet-screen-sounds\codex-pet-watch
 cd codex-pet-watch/macosx
 chmod +x build.sh
 ./build.sh
-open build/CodexPetWatch.app</pre>
+open build/CodexPetWatch.app
+
+# Create/upload GitHub release assets after gh auth is valid
+&amp; 'C:\Program Files\GitHub CLI\gh.exe' release create v0.20 .\artifacts\v0.20\codex_pet_watch-win32-x64-v0.20.zip .\artifacts\v0.20\codex_pet_watch-win32-x86-v0.20.zip --repo apws/260504-codex-pet-screen-sounds --target main --title "v0.20" --notes "Win32 x64/x86 builds. Each archive includes codex_pet_watch.exe and bundled ringout.wav. macOS assets can be uploaded later to this same release."</pre>
       </div>
     </details>
 
@@ -271,6 +290,8 @@ open build/CodexPetWatch.app</pre>
         <ul>
           <li>Compile and test macOS Objective-C app on the upgraded MacBook Air / Monterey machine.</li>
           <li>If further rectangle tuning is needed, current constants live in <code>win32/src/main.cpp</code> and <code>macosx/src/main.m</code>: size defaults are <code>24x24</code>, left offset is <code>56 px</code>, bottom offset is <code>72 px</code>.</li>
+          <li>On macOS, build and upload the macOS zip to the existing GitHub Release <code>v0.20</code>.</li>
+          <li>Consider moving the canonical <code>savechat</code> skill into its own repo/global installation flow, instead of copying it into every project.</li>
           <li>Optionally add a debounce/cooldown such as <code>--cooldown-ms=2000</code> if rings become too chatty.</li>
           <li>Optionally add a diagnostic popup/mode that shows detected monitor size, DPI, and watch rectangle.</li>
           <li>If macOS build succeeds, consider creating a macOS release asset alongside the Win32 release.</li>
