@@ -71,7 +71,7 @@ Output:
 
 ```text
 build/CodexPetWatch.app
-build/codex_pet_watch-macosx-x64.zip
+build/codex_pet_watch-macosx-x64-v0.20.zip
 ```
 
 The build script ad-hoc signs the app:
@@ -86,8 +86,8 @@ The release zip contains `CodexPetWatch.app`; inside the bundle, `Contents/MacOS
 
 ## Download
 
-- Release asset: [codex_pet_watch-macosx-x64.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/0.20/codex_pet_watch-macosx-x64.zip)
-- Release notes: [0.20](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/0.20)
+- Release asset: [codex_pet_watch-macosx-x64-v0.20.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.20/codex_pet_watch-macosx-x64-v0.20.zip)
+- Release notes: [v0.20](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.20)
 
 ## Run
 

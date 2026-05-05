@@ -4,7 +4,7 @@ set -eu
 APP_NAME="CodexPetWatch"
 BUILD_DIR="build"
 APP_DIR="$BUILD_DIR/$APP_NAME.app"
-ZIP_NAME="codex_pet_watch-macosx-x64.zip"
+ZIP_NAME="codex_pet_watch-macosx-x64-v0.20.zip"
 ZIP_PATH="$BUILD_DIR/$ZIP_NAME"
 CONTENTS="$APP_DIR/Contents"
 MACOS="$CONTENTS/MacOS"

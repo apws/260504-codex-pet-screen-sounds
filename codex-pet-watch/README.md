@@ -20,7 +20,7 @@ The macOS version is source-prepared for local build on a Mac. Its build script 
 
 ## macOS Download Note
 
-The macOS release asset is [codex_pet_watch-macosx-x64.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/0.20/codex_pet_watch-macosx-x64.zip). It contains `CodexPetWatch.app`, including the app executable and bundled shared `ringout.wav` next to it in `Contents/MacOS`.
+The macOS release asset is [codex_pet_watch-macosx-x64-v0.20.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.20/codex_pet_watch-macosx-x64-v0.20.zip). It contains `CodexPetWatch.app`, including the app executable and bundled shared `ringout.wav` next to it in `Contents/MacOS`.
 
 The app is ad-hoc signed. On first launch, choose the option to allow/configure Screen Recording permission later rather than quitting, then enable `CodexPetWatch` in Screen Recording settings and relaunch.
 
