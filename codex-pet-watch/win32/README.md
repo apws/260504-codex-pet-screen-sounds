@@ -1,8 +1,8 @@
 # codex-pet-watch
 
-Tiny Win32/GDI watcher for a `codex-pet-area` rectangle near the bottom-left of the active monitor, offset 64 px from the left edge and 80 px from the bottom edge.
+Tiny Win32/GDI watcher for a `codex-pet-area` rectangle in the upper-right area of the Codex pet sprite. The pet itself is parked near the bottom-left of the active monitor; the watched rectangle is offset 64 px from the screen's left edge and 80 px from the screen's bottom edge.
 
-**Detection rectangle:** `SIZE=16x16`, `X=64 px` from the left edge, `Y=80 px` from the bottom edge.
+**Detection rectangle:** upper-right area of the bottom-left parked pet sprite; `SIZE=16x16`, `X=64 px` from the screen's left edge, `Y=80 px` from the screen's bottom edge.
 
 It:
 
@@ -103,6 +103,12 @@ codex_pet_watch.exe [sound.wav] [widthDip heightDip] [options]
 ## Windows SmartScreen
 
 Release builds are currently unsigned. Windows may show an "unrecognized app" / SmartScreen warning the first time you run the downloaded `.exe`. This is expected for this small local-build watcher; choose `More info` / `Run anyway` if you trust this repository and release asset. Later launches are usually normal after Windows has seen the file once.
+
+Latest release assets:
+
+- x64: [codex_pet_watch-win32-x64-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-win32-x64-v0.30.zip)
+- x86: [codex_pet_watch-win32-x86-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-win32-x86-v0.30.zip)
+- Release notes: [v0.30](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.30)
 
 Examples:
 
