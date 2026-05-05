@@ -122,5 +122,6 @@ build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch /path/to/custom.wav --poll-
 ## Notes
 
 - This watches pixels, not Codex state. Pet animation can produce multiple rings.
+- The Codex pet/activity overlay can also ring when it shifts or updates while an agent is waiting for user input. This is expected and useful as a small interaction-needed signal.
 - The app anchors near the bottom-left of the main display at launch, offset 64 physical pixels from the left edge and 80 physical pixels from the bottom edge. On Retina displays, the green overlay converts those pixel dimensions and offsets to AppKit screen points so it matches the captured pixels.
 - macOS menu-bar apps normally show their menu on click; choose `Exit` to quit.

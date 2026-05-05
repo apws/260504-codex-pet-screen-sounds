@@ -142,6 +142,7 @@ The default monitor selection is the monitor containing the foreground window at
 
 - `BitBlt` captures the visible composited screen area. Hidden or occluded content is not captured.
 - The green outline is itself part of the visible screen. Since it is constant, it becomes part of the baseline and normally does not retrigger.
+- On macOS, the Codex pet/activity overlay may ring when it shifts or updates while an agent is waiting for user input; that is expected there and useful as a small interaction-needed signal. Windows has generally appeared more static in the same area.
 - Mouse cursor pixels are typically not included by this capture path.
 - Any bitmap difference triggers the sound, even a single pixel.
 - The app runs without a console window. Right-click the tray icon and choose `Exit` to stop it.

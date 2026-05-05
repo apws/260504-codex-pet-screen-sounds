@@ -8,6 +8,8 @@ The idea is intentionally simple: watch a small 16x16 bottom-left rectangle wher
 
 The 16x16 rectangle keeps the same top-right target area while trimming the busier animated pet pixels from the old bottom-left corner, so the default is usable on both macOS and Win32.
 
+On macOS, the Codex pet/activity overlay can still ring when it shifts or updates while an agent is waiting for user input. That is expected and useful: it acts as a small "interaction needed" signal even when the main pet sprite is otherwise stable.
+
 Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh145c)
 
 ## Platforms
