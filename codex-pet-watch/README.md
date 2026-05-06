@@ -18,13 +18,13 @@ Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh14
 - `macosx/` - Objective-C/AppKit macOS menu-bar app source
 - `shared/sounds/` - shared default sound asset
 
-The Windows version is the current working workaround. It launches without args, watches a 16x16 DIP rectangle in the upper-right area of the bottom-left parked pet sprite, offset 64 px from the screen's left edge and 80 px from the screen's bottom edge, plays the bundled `ringout.wav` next to the executable, and exits from the tray menu.
+The Windows version is the current working workaround. It launches without args, watches a 16x16 DIP rectangle in the upper-right area of the bottom-left parked pet sprite, offset 64 px from the screen's left edge and 80 px from the screen's bottom edge, plays the embedded default `ringout.wav` resource, and exits from the tray menu.
 
-The macOS version is source-prepared for local build on a Mac. Its build script bundles `shared/sounds/ringout.wav` into the `.app`.
+The macOS version is source-prepared for local build on a Mac. Its build script bundles `shared/sounds/ringout.wav` into the `.app` resources folder.
 
 ## macOS Download Note
 
-The macOS release asset is [codex_pet_watch-macosx-x64-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-macosx-x64-v0.30.zip). It contains `CodexPetWatch.app`, including the app executable and bundled shared `ringout.wav` next to it in `Contents/MacOS`.
+The macOS release asset is [codex_pet_watch-macosx-x64-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-macosx-x64-v0.30.zip). It contains `CodexPetWatch.app`, including the app executable and bundled shared `ringout.wav` in `Contents/Resources`.
 
 The app is ad-hoc signed. On first launch, choose the option to allow/configure Screen Recording permission later rather than quitting, then enable `CodexPetWatch` in Screen Recording settings and relaunch.
 
@@ -32,8 +32,7 @@ The app is ad-hoc signed. On first launch, choose the option to allow/configure 
 
 Latest Win32 release assets:
 
-- x64: [codex_pet_watch-win32-x64-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-win32-x64-v0.30.zip)
-- x86: [codex_pet_watch-win32-x86-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-win32-x86-v0.30.zip)
-- Release notes: [v0.30](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.30)
+- x64: [codex_pet_watch-win32-x64-v0.40.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.40/codex_pet_watch-win32-x64-v0.40.zip)
+- Release notes: [v0.40](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.40)
 
 The release executable is currently unsigned. Windows SmartScreen may show an "unrecognized app" warning the first time you run the downloaded `.exe`. This is expected for this small local-build tool; choose `More info` / `Run anyway` if you trust this repository and release asset. Later launches are usually normal after Windows has seen the file once.

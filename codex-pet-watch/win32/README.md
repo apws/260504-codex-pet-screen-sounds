@@ -18,30 +18,22 @@ It:
 
 Windows 11 / Windows 10 desktop app.
 
-The source is architecture-neutral C++ Win32 code. Build it as either:
-
-- x64 / x86-64: recommended default
-- x86 / Win32: also supported
+The normal build target is x64 / x86-64. Codex Desktop on Windows is expected
+on modern 64-bit Windows, so x86 is not part of the default repo build path.
 
 ## Sound file
 
 The app uses Win32 `PlaySoundW`, so use a `.wav` file.
 
-If no sound file is specified, the app uses `ringout.wav`.
+If no sound file is specified, the app uses the embedded default `ringout.wav` resource inside `codex_pet_watch.exe`.
 
-Builds copy the shared default sound from:
+Builds embed the shared default sound from:
 
 ```text
 ../shared/sounds/ringout.wav
 ```
 
-to the executable output folder as:
-
-```text
-ringout.wav
-```
-
-Relative sound paths are resolved against the executable folder. For example, if you run:
+Relative custom sound paths are still resolved against the executable folder. For example, if you run:
 
 ```bat
 codex_pet_watch.exe alert.wav
@@ -49,9 +41,79 @@ codex_pet_watch.exe alert.wav
 
 then the app tries to play `alert.wav` from the same folder as `codex_pet_watch.exe`.
 
-## Build with CMake + MSVC
+## Download
 
-Open a **Developer Command Prompt for Visual Studio** in this folder.
+For most users, use the x64 release binary instead of installing build tools:
+
+- [codex_pet_watch-win32-x64-v0.40.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.40/codex_pet_watch-win32-x64-v0.40.zip)
+- [v0.40 release notes](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.40)
+
+## Build With MSVC
+
+From the repository root:
+
+```powershell
+.\build.ps1
+```
+
+This builds the Windows x64 executable:
+
+```powershell
+codex-pet-watch\win32\build-x64\Release\codex_pet_watch.exe
+```
+
+The script detects Visual Studio Build Tools and loads `VsDevCmd.bat` for you,
+so `cl`, `rc`, `link`, `msbuild`, and `cmake` do not need to be on the global
+PATH.
+
+If a repo-built `codex_pet_watch.exe` is already running, the build script stops
+it before rebuilding so the linker can overwrite the executable.
+
+To launch the rebuilt x64 applet from the repository root:
+
+```powershell
+.\run.ps1
+```
+
+If the executable is missing, `run.ps1` builds it first. If it is already
+running, `run.ps1` leaves the existing applet alone; use `.\run.ps1 -Restart`
+to stop and relaunch it.
+
+If the required headless Microsoft C++ toolchain is missing, install it with:
+
+```powershell
+.\tools\get-tools.ps1
+```
+
+That uses `winget` to install Visual Studio 2022 Build Tools with the C++
+workload and Windows SDK. It does not install the full Visual Studio IDE.
+
+To inspect the exact install command without changing the machine:
+
+```powershell
+.\tools\get-tools.ps1 -DryRun
+```
+
+If `winget` is missing, install App Installer from Microsoft:
+
+```text
+https://apps.microsoft.com/detail/9nblggh4nns1
+```
+
+Or install Visual Studio 2022 Build Tools manually:
+
+```text
+https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022
+```
+
+Required workload:
+
+```text
+Desktop development with C++
+```
+
+Manual build scripts are also available from this folder after opening a
+**Developer Command Prompt for Visual Studio**.
 
 For x64:
 
@@ -63,20 +125,6 @@ Output:
 
 ```text
 build-x64\Release\codex_pet_watch.exe
-build-x64\Release\ringout.wav
-```
-
-For x86:
-
-```bat
-build_msvc_x86.bat
-```
-
-Output:
-
-```text
-build-x86\Release\codex_pet_watch.exe
-build-x86\Release\ringout.wav
 ```
 
 ## Build with plain `cl`
@@ -91,7 +139,6 @@ Output:
 
 ```text
 build\codex_pet_watch.exe
-build\ringout.wav
 ```
 
 ## Usage
@@ -106,9 +153,8 @@ Release builds are currently unsigned. Windows may show an "unrecognized app" / 
 
 Latest release assets:
 
-- x64: [codex_pet_watch-win32-x64-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-win32-x64-v0.30.zip)
-- x86: [codex_pet_watch-win32-x86-v0.30.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.30/codex_pet_watch-win32-x86-v0.30.zip)
-- Release notes: [v0.30](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.30)
+- x64: [codex_pet_watch-win32-x64-v0.40.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.40/codex_pet_watch-win32-x64-v0.40.zip)
+- Release notes: [v0.40](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.40)
 
 Examples:
 

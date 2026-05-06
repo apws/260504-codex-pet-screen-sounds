@@ -49,10 +49,10 @@ The build script copies the shared default sound:
 into:
 
 ```text
-build/CodexPetWatch.app/Contents/MacOS/ringout.wav
+build/CodexPetWatch.app/Contents/Resources/ringout.wav
 ```
 
-You can replace that executable-adjacent `.wav` after building, replace the shared file before building, or pass an explicit sound path when launching the app binary directly. Relative sound paths are resolved against `Contents/MacOS`, the same folder as the `CodexPetWatch` executable.
+You can replace that bundle resource after building, replace the shared file before building, or pass an explicit sound path when launching the app binary directly. Relative custom sound paths are resolved against `Contents/MacOS`, the same folder as the `CodexPetWatch` executable.
 
 ## Build
 
@@ -84,7 +84,7 @@ codesign --force --deep --sign - build/CodexPetWatch.app
 
 Keep this signing step in place. It helps macOS keep Screen Recording permission across rebuilds of the local app.
 
-The release zip contains `CodexPetWatch.app`; inside the bundle, `Contents/MacOS/CodexPetWatch` and `Contents/MacOS/ringout.wav` sit next to each other.
+The release zip contains `CodexPetWatch.app`; inside the bundle, `Contents/MacOS/CodexPetWatch` is the executable and `Contents/Resources/ringout.wav` is the bundled default sound.
 
 ## Download
 

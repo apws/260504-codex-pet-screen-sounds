@@ -26,6 +26,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include "../resource.h"
 
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "gdi32.lib")
@@ -48,6 +49,7 @@ constexpr int kBottomOffsetPx = 80;
 
 struct Config {
     std::wstring soundPath;
+    bool useEmbeddedDefaultSound = false;
     int widthDip = kDefaultWidthDip;
     int heightDip = kDefaultHeightDip;
     UINT pollMs = 1000;
@@ -132,8 +134,8 @@ void PrintUsage() {
         L"  --primary-monitor       Use primary monitor at launch.\n"
         L"  --help                  Show this help.\n\n"
         L"Notes:\n"
-        L"  If no sound file is specified, ringout.wav is used.\n"
-        L"  Relative sound paths are loaded from the executable folder. PlaySound is WAV-oriented.\n"
+        L"  If no sound file is specified, the embedded ringout.wav resource is used.\n"
+        L"  Relative custom sound paths are loaded from the executable folder. PlaySound is WAV-oriented.\n"
         L"  Coordinates/capture use physical pixels internally; size args are logical DIP.\n");
 }
 
@@ -193,7 +195,12 @@ bool ParseArgs(int argc, wchar_t** argv, Config& cfg) {
         }
     }
 
-    cfg.soundPath = ResolveAgainstExecutableFolder(positionals.empty() ? kDefaultSoundFile : positionals[0]);
+    if (positionals.empty()) {
+        cfg.useEmbeddedDefaultSound = true;
+        cfg.soundPath = kDefaultSoundFile;
+    } else {
+        cfg.soundPath = ResolveAgainstExecutableFolder(positionals[0]);
+    }
 
     if (positionals.size() >= 3) {
         if (!TryParseInt(positionals[1], cfg.widthDip) || !TryParseInt(positionals[2], cfg.heightDip)) {
@@ -348,7 +355,7 @@ void PrintMonitorAndRect(const MonitorSnapshot& snap, const RECT& r, const Confi
         r.left, r.top, RectWidth(r), RectHeight(r),
         cfg.widthDip, cfg.heightDip,
         cfg.pollMs,
-        cfg.soundPath.c_str());
+        cfg.useEmbeddedDefaultSound ? L"embedded ringout.wav resource" : cfg.soundPath.c_str());
     std::fflush(stdout);
 }
 
@@ -399,6 +406,14 @@ bool CaptureRectPixelsBgra(const RECT& r, std::vector<std::uint8_t>& pixels) {
 }
 
 void PlayConfiguredSound() {
+    if (g_app.cfg.useEmbeddedDefaultSound) {
+        if (!PlaySoundW(MAKEINTRESOURCEW(IDR_RINGOUT_WAVE), GetModuleHandleW(nullptr), SND_RESOURCE | SND_ASYNC | SND_NODEFAULT)) {
+            std::fwprintf(stderr, L"PlaySound failed for embedded ringout.wav resource.\n");
+            std::fflush(stderr);
+        }
+        return;
+    }
+
     if (!PlaySoundW(g_app.cfg.soundPath.c_str(), nullptr, SND_FILENAME | SND_ASYNC | SND_NODEFAULT)) {
         std::fwprintf(stderr, L"PlaySound failed for: %ls\n", g_app.cfg.soundPath.c_str());
         std::fflush(stderr);
@@ -688,10 +703,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int) {
     }
     LocalFree(argv);
 
-    DWORD soundAttrs = GetFileAttributesW(cfg.soundPath.c_str());
-    if (soundAttrs == INVALID_FILE_ATTRIBUTES || (soundAttrs & FILE_ATTRIBUTE_DIRECTORY)) {
-        std::fwprintf(stderr, L"Warning: sound file was not found: %ls\n", cfg.soundPath.c_str());
-        std::fwprintf(stderr, L"The watcher will still run, but PlaySound will fail until the path exists.\n\n");
+    if (!cfg.useEmbeddedDefaultSound) {
+        DWORD soundAttrs = GetFileAttributesW(cfg.soundPath.c_str());
+        if (soundAttrs == INVALID_FILE_ATTRIBUTES || (soundAttrs & FILE_ATTRIBUTE_DIRECTORY)) {
+            std::fwprintf(stderr, L"Warning: sound file was not found: %ls\n", cfg.soundPath.c_str());
+            std::fwprintf(stderr, L"The watcher will still run, but PlaySound will fail until the path exists.\n\n");
+        }
     }
 
     g_app.cfg = cfg;

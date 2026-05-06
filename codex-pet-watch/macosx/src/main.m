@@ -268,7 +268,10 @@ static BOOL ParseConfig(AppConfig *cfg) {
 - (void)prepareSound {
     NSString *path = self.config.soundPath;
     if (!path) {
-        path = ResolveAgainstExecutableFolder([kDefaultSoundName stringByAppendingPathExtension:@"wav"]);
+        path = [[NSBundle mainBundle] pathForResource:kDefaultSoundName ofType:@"wav"];
+        if (!path) {
+            path = ResolveAgainstExecutableFolder([kDefaultSoundName stringByAppendingPathExtension:@"wav"]);
+        }
     } else {
         path = ResolveAgainstExecutableFolder(path);
     }
