@@ -25,35 +25,28 @@ The release executable is unsigned, so Windows SmartScreen may show an "unrecogn
 
 Source and build notes: [codex-pet-watch/win32](codex-pet-watch/win32)
 
-From a fresh Windows clone:
+From a fresh Windows clone, install/check tools, build, and launch from the repository root:
 
-```powershell
-.\build.ps1
+```bat
+get-tools.cmd
+build.cmd
+run.cmd
 ```
 
-The build script finds Visual Studio Build Tools, loads the MSVC environment,
-and builds the Windows x64 app. To launch the rebuilt applet:
+To inspect the tool install command without changing the machine:
 
-```powershell
-.\run.ps1
+```bat
+get-tools.cmd -DryRun
 ```
 
-If the headless Microsoft C++ toolchain is missing, install it with:
-
-```powershell
-.\tools\get-tools.ps1
-```
-
-To inspect the install command without changing the machine:
-
-```powershell
-.\tools\get-tools.ps1 -DryRun
-```
-
-`get-tools.ps1` uses `winget` to install Visual Studio 2022 Build Tools with
+The root `.cmd` launchers call the PowerShell implementations in `tools\`.
+`get-tools.cmd` uses `winget` to install Visual Studio 2022 Build Tools with
 the C++ workload and Windows SDK. It does not install the full Visual Studio
-IDE. If `winget` is missing, install App Installer from Microsoft, or install
-Visual Studio 2022 Build Tools manually with the `Desktop development with C++`
+IDE. `build.cmd` finds Visual Studio Build Tools, loads the MSVC environment,
+and builds the Windows x64 app. `run.cmd` launches the rebuilt applet.
+
+If `winget` is missing, install App Installer from Microsoft, or install Visual
+Studio 2022 Build Tools manually with the `Desktop development with C++`
 workload.
 
 Manual fallback links:
@@ -71,29 +64,26 @@ The macOS app is distributed as a zip containing `CodexPetWatch.app`. The app bu
 
 ### Build On macOS
 
-From a fresh Monterey-style macOS clone, install/check tools without Homebrew:
+From a fresh Monterey-style macOS clone, install/check tools, build, and launch
+from the repository root:
 
 ```sh
 ./get-tools.sh
+./build.sh
+./run.sh
 ```
 
-To inspect the steps without changing the machine:
+To inspect the tool install steps without changing the machine:
 
 ```sh
 ./get-tools.sh --dry-run
 ```
 
-The macOS helper uses Apple Command Line Tools for `git`, `clang`, and SDKs,
-and installs GitHub CLI from GitHub's official `.pkg` release if `gh` is
-missing. It intentionally avoids Homebrew because older Monterey setups can be
-awkward when Homebrew needs newer source-built dependencies.
-
-Then build and launch from the repository root:
-
-```sh
-./build.sh
-./run.sh
-```
+The root `.sh` launchers call the shell implementations in `tools/`. The macOS
+helper uses Apple Command Line Tools for `git`, `clang`, and SDKs, and installs
+GitHub CLI from GitHub's official `.pkg` release if `gh` is missing. It
+intentionally avoids Homebrew because older Monterey setups can be awkward when
+Homebrew needs newer source-built dependencies.
 
 If Apple Command Line Tools are missing, `./build.sh --install-missing` runs
 the Homebrew-free macOS tool helper first.

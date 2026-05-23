@@ -50,49 +50,38 @@ For most users, use the x64 release binary instead of installing build tools:
 
 ## Build With MSVC
 
-From the repository root:
+From the repository root, install/check tools, build, and launch:
 
-```powershell
-.\build.ps1
+```bat
+get-tools.cmd
+build.cmd
+run.cmd
 ```
 
-This builds the Windows x64 executable:
+To inspect the tool install command without changing the machine:
 
-```powershell
-codex-pet-watch\win32\build-x64\Release\codex_pet_watch.exe
+```bat
+get-tools.cmd -DryRun
 ```
 
-The script detects Visual Studio Build Tools and loads `VsDevCmd.bat` for you,
-so `cl`, `rc`, `link`, `msbuild`, and `cmake` do not need to be on the global
-PATH.
+The root `.cmd` launchers call the PowerShell implementations in `tools\`.
+`get-tools.cmd` uses `winget` to install Visual Studio 2022 Build Tools with
+the C++ workload and Windows SDK. `build.cmd` detects Visual Studio Build Tools
+and loads `VsDevCmd.bat` for you, so `cl`, `rc`, `link`, `msbuild`, and `cmake`
+do not need to be on the global PATH.
 
 If a repo-built `codex_pet_watch.exe` is already running, the build script stops
 it before rebuilding so the linker can overwrite the executable.
 
-To launch the rebuilt x64 applet from the repository root:
+The x64 build output is:
 
-```powershell
-.\run.ps1
+```text
+codex-pet-watch\win32\build-x64\Release\codex_pet_watch.exe
 ```
 
-If the executable is missing, `run.ps1` builds it first. If it is already
-running, `run.ps1` leaves the existing applet alone; use `.\run.ps1 -Restart`
-to stop and relaunch it.
-
-If the required headless Microsoft C++ toolchain is missing, install it with:
-
-```powershell
-.\tools\get-tools.ps1
-```
-
-That uses `winget` to install Visual Studio 2022 Build Tools with the C++
-workload and Windows SDK. It does not install the full Visual Studio IDE.
-
-To inspect the exact install command without changing the machine:
-
-```powershell
-.\tools\get-tools.ps1 -DryRun
-```
+If the executable is missing, `run.cmd` builds it first. If it is already
+running, `run.cmd` leaves the existing applet alone; use `run.cmd -Restart` to
+stop and relaunch it.
 
 If `winget` is missing, install App Installer from Microsoft:
 

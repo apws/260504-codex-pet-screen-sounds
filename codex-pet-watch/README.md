@@ -18,6 +18,14 @@ Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh14
 - `macosx/` - Objective-C/AppKit macOS menu-bar app source
 - `shared/sounds/` - shared default sound asset
 
+From a fresh clone or source zip, the root launcher flow is intentionally the
+same on both platforms:
+
+```text
+Windows: get-tools.cmd -> build.cmd -> run.cmd
+macOS:   ./get-tools.sh -> ./build.sh -> ./run.sh
+```
+
 The Windows version is the current working workaround. It launches without args, watches a 16x16 DIP rectangle in the upper-right area of the bottom-left parked pet sprite, offset 100 px from the screen's left edge and 116 px from the screen's bottom edge, plays the embedded default `ringout.wav` resource, and exits from the tray menu.
 
 The macOS version is source-prepared for local build on a Mac. Its build script bundles `shared/sounds/ringout.wav` into the `.app` resources folder.
