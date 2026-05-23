@@ -1,7 +1,7 @@
 Monitor px:     left=0 top=0 right=1920 bottom=1200 size=1920x1200
 Monitor logical: size=1920x1200 DIP at dpi=96x96
 Anchor area:    full monitor
-Pet rect px:    left=96 top=1064 width=16 height=16
+Pet rect px:    left=100 top=1068 width=16 height=16
 Pet rect DIP:   width=16 height=16
 Poll:           1000 ms
 Sound:          C:\Users\petra\Versioning\~prj\260504-codex-pet-screen-sounds\codex-pet-watch\win32\build-x64\Release\ringout.wav

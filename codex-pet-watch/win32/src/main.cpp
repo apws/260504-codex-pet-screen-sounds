@@ -44,8 +44,8 @@ constexpr UINT kTrayIconId = 1;
 constexpr UINT kTrayExitCommand = 1001;
 constexpr int kDefaultWidthDip = 16;
 constexpr int kDefaultHeightDip = 16;
-constexpr int kLeftOffsetPx = 96;
-constexpr int kBottomOffsetPx = 120;
+constexpr int kLeftOffsetPx = 100;
+constexpr int kBottomOffsetPx = 116;
 
 struct Config {
     std::wstring soundPath;

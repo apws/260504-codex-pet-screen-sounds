@@ -1,8 +1,8 @@
 # codex-pet-watch
 
-Tiny Win32/GDI watcher for a `codex-pet-area` rectangle in the upper-right area of the Codex pet sprite. The pet itself is parked near the bottom-left of the active monitor; the watched rectangle is offset 96 px from the screen's left edge and 120 px from the screen's bottom edge.
+Tiny Win32/GDI watcher for a `codex-pet-area` rectangle in the upper-right area of the Codex pet sprite. The pet itself is parked near the bottom-left of the active monitor; the watched rectangle is offset 100 px from the screen's left edge and 116 px from the screen's bottom edge.
 
-**Detection rectangle:** upper-right area of the bottom-left parked pet sprite; `SIZE=16x16`, `X=96 px` from the screen's left edge, `Y=120 px` from the screen's bottom edge.
+**Detection rectangle:** upper-right area of the bottom-left parked pet sprite; `SIZE=16x16`, `X=100 px` from the screen's left edge, `Y=116 px` from the screen's bottom edge.
 
 It:
 
@@ -186,7 +186,7 @@ The app accepts rectangle size in logical DIP units, then converts to physical p
 physical_px = logical_dip * monitor_dpi / 96
 ```
 
-Internally, the overlay position and GDI capture rectangle use physical desktop pixels, with the rectangle offset 96 px from the selected anchor area's left edge and 120 px from its bottom edge. This matters for multi-monitor setups, DPI scaling, and monitors with negative coordinates.
+Internally, the overlay position and GDI capture rectangle use physical desktop pixels, with the rectangle offset 100 px from the selected anchor area's left edge and 116 px from its bottom edge. This matters for multi-monitor setups, DPI scaling, and monitors with negative coordinates.
 
 The default monitor selection is the monitor containing the foreground window at launch. If there is no foreground window, it falls back to the cursor monitor, then primary monitor.
 
