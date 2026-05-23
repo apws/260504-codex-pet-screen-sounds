@@ -2,9 +2,9 @@
 
 Tiny native pet pixel watcher applets.
 
-The idea is intentionally simple: the Codex pet sits near the bottom-left corner of the screen, and the watcher observes a small 16x16 rectangle in the pet sprite's upper-right area, offset 64 px from the screen's left edge and 80 px from the screen's bottom edge. It compares captured pixels and plays a sound when the pet changes visually.
+The idea is intentionally simple: the Codex pet sits near the bottom-left corner of the screen, and the watcher observes a small 16x16 rectangle in the pet sprite's upper-right area, offset 96 px from the screen's left edge and 120 px from the screen's bottom edge. It compares captured pixels and plays a sound when the pet changes visually.
 
-**Detection rectangle:** upper-right area of the bottom-left parked pet sprite; `SIZE=16x16`, `X=64 px` from the screen's left edge, `Y=80 px` from the screen's bottom edge.
+**Detection rectangle:** upper-right area of the bottom-left parked pet sprite; `SIZE=16x16`, `X=96 px` from the screen's left edge, `Y=120 px` from the screen's bottom edge.
 
 The 16x16 rectangle keeps the same upper-right target area of the pet sprite while trimming the busier animated pixels from the old lower-left part of the sprite, so the default is usable on both macOS and Win32.
 
@@ -18,7 +18,7 @@ Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh14
 - `macosx/` - Objective-C/AppKit macOS menu-bar app source
 - `shared/sounds/` - shared default sound asset
 
-The Windows version is the current working workaround. It launches without args, watches a 16x16 DIP rectangle in the upper-right area of the bottom-left parked pet sprite, offset 64 px from the screen's left edge and 80 px from the screen's bottom edge, plays the embedded default `ringout.wav` resource, and exits from the tray menu.
+The Windows version is the current working workaround. It launches without args, watches a 16x16 DIP rectangle in the upper-right area of the bottom-left parked pet sprite, offset 96 px from the screen's left edge and 120 px from the screen's bottom edge, plays the embedded default `ringout.wav` resource, and exits from the tray menu.
 
 The macOS version is source-prepared for local build on a Mac. Its build script bundles `shared/sounds/ringout.wav` into the `.app` resources folder.
 

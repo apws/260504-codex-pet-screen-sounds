@@ -4,8 +4,8 @@
 static NSString * const kDefaultSoundName = @"ringout";
 static const CGFloat kDefaultWidthPixels = 16.0;
 static const CGFloat kDefaultHeightPixels = 16.0;
-static const CGFloat kLeftOffsetPixels = 64.0;
-static const CGFloat kBottomOffsetPixels = 80.0;
+static const CGFloat kLeftOffsetPixels = 96.0;
+static const CGFloat kBottomOffsetPixels = 120.0;
 
 @interface AppConfig : NSObject
 @property(nonatomic, copy) NSString *soundPath;

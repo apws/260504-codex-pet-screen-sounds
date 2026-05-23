@@ -2,7 +2,7 @@
 
 Native macOS menu-bar version of the pet pixel watcher.
 
-**Detection rectangle:** upper-right area of the bottom-left parked pet sprite; `SIZE=16x16`, `X=64 px` from the screen's left edge, `Y=80 px` from the screen's bottom edge.
+**Detection rectangle:** upper-right area of the bottom-left parked pet sprite; `SIZE=16x16`, `X=96 px` from the screen's left edge, `Y=120 px` from the screen's bottom edge.
 
 The Codex pet is parked near the bottom-left corner of the screen. This keeps the same upper-right target area of the pet sprite while trimming the busier animated pixels from the old lower-left part of the sprite; the default matches the Win32 watcher.
 
@@ -10,7 +10,7 @@ This mirrors the Win32 workaround:
 
 - runs as a menu-bar app with no Dock icon
 - shows a small `C` status icon with a green marker for the watched pet area
-- watches a 16x16 physical-pixel rectangle in the upper-right area of the bottom-left parked pet sprite, offset 64 px from the screen's left edge and 80 px from the screen's bottom edge
+- watches a 16x16 physical-pixel rectangle in the upper-right area of the bottom-left parked pet sprite, offset 96 px from the screen's left edge and 120 px from the screen's bottom edge
 - captures that rectangle once per second with CoreGraphics
 - compares bitmap bytes against the previous capture
 - plays a sound when any pixel changes
@@ -123,5 +123,5 @@ build/CodexPetWatch.app/Contents/MacOS/CodexPetWatch /path/to/custom.wav --poll-
 
 - This watches pixels, not Codex state. Pet animation can produce multiple rings.
 - The Codex pet/activity overlay can also ring when it shifts or updates while an agent is waiting for user input. This is expected and useful as a small interaction-needed signal.
-- The app watches the upper-right area of the bottom-left parked pet sprite. Its screen anchor is offset 64 physical pixels from the left edge and 80 physical pixels from the bottom edge of the main display at launch. On Retina displays, the green overlay converts those pixel dimensions and offsets to AppKit screen points so it matches the captured pixels.
+- The app watches the upper-right area of the bottom-left parked pet sprite. Its screen anchor is offset 96 physical pixels from the left edge and 120 physical pixels from the bottom edge of the main display at launch. On Retina displays, the green overlay converts those pixel dimensions and offsets to AppKit screen points so it matches the captured pixels.
 - macOS menu-bar apps normally show their menu on click; choose `Exit` to quit.
