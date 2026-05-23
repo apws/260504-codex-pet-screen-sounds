@@ -56,6 +56,33 @@ You can replace that bundle resource after building, replace the shared file bef
 
 ## Build
 
+From the repository root, you can install/check the macOS tools without Homebrew:
+
+```sh
+./get-tools.sh
+```
+
+To inspect the steps without changing the machine:
+
+```sh
+./get-tools.sh --dry-run
+```
+
+The helper uses Apple Command Line Tools for `git`, `clang`, and SDKs, and
+installs GitHub CLI from GitHub's official `.pkg` release if `gh` is missing.
+It intentionally avoids Homebrew because older Monterey setups can be awkward
+when Homebrew needs newer source-built dependencies.
+
+From the repository root, build and launch with:
+
+```sh
+./build.sh
+./run.sh
+```
+
+If Apple Command Line Tools are missing, `./build.sh --install-missing` runs
+the Homebrew-free macOS tool helper first.
+
 Install Xcode Command Line Tools:
 
 ```sh

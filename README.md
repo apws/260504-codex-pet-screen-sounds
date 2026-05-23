@@ -69,6 +69,35 @@ Manual fallback links:
 
 The macOS app is distributed as a zip containing `CodexPetWatch.app`. The app bundle includes `Contents/MacOS/CodexPetWatch` and the shared `ringout.wav` next to the executable. The app is ad-hoc signed and macOS will require Screen Recording permission on first launch.
 
+### Build On macOS
+
+From a fresh Monterey-style macOS clone, install/check tools without Homebrew:
+
+```sh
+./get-tools.sh
+```
+
+To inspect the steps without changing the machine:
+
+```sh
+./get-tools.sh --dry-run
+```
+
+The macOS helper uses Apple Command Line Tools for `git`, `clang`, and SDKs,
+and installs GitHub CLI from GitHub's official `.pkg` release if `gh` is
+missing. It intentionally avoids Homebrew because older Monterey setups can be
+awkward when Homebrew needs newer source-built dependencies.
+
+Then build and launch from the repository root:
+
+```sh
+./build.sh
+./run.sh
+```
+
+If Apple Command Line Tools are missing, `./build.sh --install-missing` runs
+the Homebrew-free macOS tool helper first.
+
 ## Project Layout
 
 - [codex-pet-watch](codex-pet-watch) - shared project notes
