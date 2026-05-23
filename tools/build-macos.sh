@@ -2,7 +2,7 @@
 set -eu
 
 APP_NAME="CodexPetWatch"
-ZIP_NAME="codex_pet_watch-macosx-x64-v0.30.zip"
+ZIP_NAME="codex_pet_watch-macosx-x64-v0.50.zip"
 INSTALL_MISSING=0
 
 usage() {
