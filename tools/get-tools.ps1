@@ -4,24 +4,53 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+function Test-IsAdministrator {
+  $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+  $principal = New-Object Security.Principal.WindowsPrincipal($identity)
+  return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function Require-Administrator {
+  if (-not (Test-IsAdministrator)) {
+    Write-Host "get-tools.ps1 must be run from an elevated PowerShell or Command Prompt." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "Open PowerShell as Administrator, then run:"
+    Write-Host "  .\tools\get-tools.ps1"
+    Write-Host ""
+    throw "Administrator privileges are required."
+  }
+}
+
+function Repair-Winget {
+  Write-Host "winget was not found. Bootstrapping WinGet with PowerShell..." -ForegroundColor Yellow
+  Write-Host ""
+  Write-Host "This installs the Microsoft.WinGet.Client module from PSGallery,"
+  Write-Host "then uses Repair-WinGetPackageManager -AllUsers."
+  Write-Host ""
+
+  $progressPreference = "SilentlyContinue"
+
+  Install-PackageProvider -Name NuGet -Force | Out-Null
+  Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery -Scope AllUsers | Out-Null
+  Repair-WinGetPackageManager -AllUsers
+
+  $winget = Get-Command winget -ErrorAction SilentlyContinue
+  if (-not $winget) {
+    throw "WinGet bootstrap completed, but winget is still not available. Open a new elevated terminal and rerun .\tools\get-tools.ps1."
+  }
+
+  return $winget.Source
+}
+
 function Require-Winget {
   $winget = Get-Command winget -ErrorAction SilentlyContinue
   if (-not $winget) {
-    Write-Host "winget was not found." -ForegroundColor Yellow
-    Write-Host ""
-    Write-Host "Install App Installer from Microsoft:"
-    Write-Host "  https://apps.microsoft.com/detail/9nblggh4nns1"
-    Write-Host ""
-    Write-Host "Or install Visual Studio 2022 Build Tools manually:"
-    Write-Host "  https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022"
-    Write-Host ""
-    Write-Host "Required workload:"
-    Write-Host "  Desktop development with C++"
-    Write-Host ""
-    throw "Missing winget/App Installer."
+    return Repair-Winget
   }
   return $winget.Source
 }
+
+Require-Administrator
 
 Write-Host "Installing headless Windows C++ build tools with winget..."
 Write-Host ""
