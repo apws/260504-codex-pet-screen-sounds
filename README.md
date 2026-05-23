@@ -14,8 +14,8 @@ Demo video: [Codex pet sounds watcher](https://www.youtube.com/watch?v=YI3Urzh14
 
 For most users, use the release binary. It does not require build tools:
 
-- Download x64: [codex_pet_watch-win32-x64-v0.40.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.40/codex_pet_watch-win32-x64-v0.40.zip)
-- Release notes: [v0.40](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.40)
+- Download x64: [codex_pet_watch-win32-x64-v0.50.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.50/codex_pet_watch-win32-x64-v0.50.zip)
+- Release notes: [v0.50](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.50)
 
 The Windows app launches without args, lives in the system tray, watches a 16x16 DIP rectangle in the upper-right area of the bottom-left parked pet sprite, offset 100 px from the screen's left edge and 116 px from the screen's bottom edge, and plays the embedded default `ringout.wav` when the watched pixels change. Right-click the tray icon and choose `Exit` to stop it.
 

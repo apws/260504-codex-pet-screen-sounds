@@ -45,8 +45,8 @@ then the app tries to play `alert.wav` from the same folder as `codex_pet_watch.
 
 For most users, use the x64 release binary instead of installing build tools:
 
-- [codex_pet_watch-win32-x64-v0.40.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.40/codex_pet_watch-win32-x64-v0.40.zip)
-- [v0.40 release notes](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.40)
+- [codex_pet_watch-win32-x64-v0.50.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.50/codex_pet_watch-win32-x64-v0.50.zip)
+- [v0.50 release notes](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.50)
 
 ## Build With MSVC
 
@@ -153,8 +153,8 @@ Release builds are currently unsigned. Windows may show an "unrecognized app" / 
 
 Latest release assets:
 
-- x64: [codex_pet_watch-win32-x64-v0.40.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.40/codex_pet_watch-win32-x64-v0.40.zip)
-- Release notes: [v0.40](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.40)
+- x64: [codex_pet_watch-win32-x64-v0.50.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.50/codex_pet_watch-win32-x64-v0.50.zip)
+- Release notes: [v0.50](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.50)
 
 Examples:
 

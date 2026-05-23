@@ -32,7 +32,7 @@ The app is ad-hoc signed. On first launch, choose the option to allow/configure 
 
 Latest Win32 release assets:
 
-- x64: [codex_pet_watch-win32-x64-v0.40.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.40/codex_pet_watch-win32-x64-v0.40.zip)
-- Release notes: [v0.40](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.40)
+- x64: [codex_pet_watch-win32-x64-v0.50.zip](https://github.com/apws/260504-codex-pet-screen-sounds/releases/download/v0.50/codex_pet_watch-win32-x64-v0.50.zip)
+- Release notes: [v0.50](https://github.com/apws/260504-codex-pet-screen-sounds/releases/tag/v0.50)
 
 The release executable is currently unsigned. Windows SmartScreen may show an "unrecognized app" warning the first time you run the downloaded `.exe`. This is expected for this small local-build tool; choose `More info` / `Run anyway` if you trust this repository and release asset. Later launches are usually normal after Windows has seen the file once.
